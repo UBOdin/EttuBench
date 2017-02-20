@@ -9,7 +9,7 @@
 DunnIndex <- function(distMat, label) {
   # find minimum intercluster distance
   max_clust <- max(label)
-
+  
   minInter <- 10000
   for (i in 1:(max_clust - 1)) {
     for (j in (i+1):max_clust) {
@@ -19,7 +19,7 @@ DunnIndex <- function(distMat, label) {
       }
     }
   }
-
+  
   maxIntra <- -1
   for (i in 1:max_clust) {
     temp <- maxWeights(distMat, label, i, i)
@@ -147,122 +147,21 @@ avgSilhoette <- function(distMat, label) {
 #' @export
 silhouettePlot <- function(distMat, label, fileName) {
   sil <- silhouette(label, as.dist(distMat))
-  fviz_silhouette(sil, print.summary = FALSE) +
-    ylab("Silhouette Coefficient") + xlab("Cluster") +
-    ggsave(filename = fileName)
-}
-
-#' read full distance matrix
-#' @param fileName the input file that contains full n x n matrix (n rows and n columns)
-#' @return distMat a n x n matrix of pairwise distance between a set of n queries
-#' @author Duc Luong
-#' @export
-readDistMat <- function(fileName) {
-  as.matrix(read.csv(file = fileName, header = FALSE))
-}
-
-#' read sparse distance matrix (not yet implement)
-#' @param fileName the input file that contains matrix in sparse representation (csv file with header row, col, val)
-#' @return distMat a n x n matrix of pairwise distance between a set of n queries
-#' @author Duc Luong
-#' @export
-readSparseDistMat <- function(fileName) {
-  # not yet implement
-}
-
-
-
-#' read feature vector file in sparse representation
-#' @param fileName the input file with 3 columns (row, col, val)
-#' @return a n x p matrix where n is the number of queries and p is the number of features
-#' @author Duc Luong
-#' @export
-readFeatureVectors <- function(fileName) {
-  dataset <- read.csv(file = fileName, header = TRUE)
-  featureMat <- sparseMatrix(i = dataset$row, j = dataset$column, x = dataset$value)
-  #featureMat <- featureMat[rowSums(featureMat) != 0, colSums(featureMat) != 0]
-}
-
-#' compute pairwise distance between queries from the set of feature vectors using cosine similarity
-#' @param featureMat a nxp matrix where n is the number of queries and p is the number of features
-#' @return a nxn matrix in which each entry contains a pairwise distance between queries
-#' @author Duc Luong
-#' @export
-computeCosinePairwiseDistance <- function(featureMat) {
-  distMat <- 1-cosine(as.matrix(t(featureMat)))
-}
-
-#' read the label file that contains the list of labels which outputs from WL algorithm
-#' @param filename file that contains label file
-#' @return the list of labels
-#' @author Duc Luong
-#' @export
-readLabelFile <- function(filename) {
-  labels <- c()
-  read_con <- file(filename, "rt")
-  label <- ""
-  count <- 0
-  while (TRUE) {
-    lines <- readLines(read_con, 50000) # read 50000 line at a time
-    if (length(lines) < 1) {
-      break
-    } else {
-      for (line in lines) {
-        if (grepl("^[0-9]", line) && grepl("[0-9]$", line)) {
-          if (as.integer(line) == count + 1) {
-            if (label != "") {
-              labels <- c(labels, label)
-              label <- ""
-            }
-            count <- count +1
-          } else {
-            label <- paste0(label, line)
-          }
-
-        } else {
-          label <- paste0(label, line)
-        }
-      }
-    }
+  if (length(unique(label)) < 9) {
+    fviz_silhouette(sil, label = FALSE, print.summary = FALSE, 
+                    palette = "Dark2",
+                    ylab = "Silhouette Coefficient", main="", ylim=c(-0.8, 0.9)) +
+      theme_minimal(base_size=12)+
+      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
+      ggsave(filename = fileName)  
+  } else {
+    getPalette = colorRampPalette(brewer.pal(9, "Set1"))
+    fviz_silhouette(sil, label = FALSE, print.summary = FALSE, 
+                    palette = getPalette(length(unique(label))),
+                    ylab = "Silhouette Coefficient", main="", ylim=c(-0.8, 0.9)) +
+      theme_minimal(base_size=12)+
+      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
+      ggsave(filename = fileName)  
   }
-  labels <- c(labels, label)
-  # close connections
-  close(read_con)
-  labels
-}
-
-#' perform topic modeling using feature vector file and compare query similarity using Hellinger distance
-#' @param labelFile file that contains list labels
-#' @param featureVecFile file that contains feature vectors in sparse representation (row, col, val). Each row is a feature vector for one corresponding query
-#' @param datasetFile file that contains other information about queries (query itself, id, label)
-#' @param numTopic number of topics
-#' @param SEED the random seed for LDA using VEM algorithm
-#' @return the n x n matrix that contains distance between queries using Hellinger distance
-#' @author Duc Luong
-#' @export
-computeDistMatTopic <- function(labelFile, featureVecFile, datasetFile, numTopic, SEED = 2010) {
-  VEM <- getTopicModelResult(labelFile, featureVecFile, datasetFile, numTopic)
-  # get the distribution of topics for each query, each row is a query
-  topic_dist <- attr(VEM, "gamma")
-  # compute the pairwise distance between queries using topic distribution
-  result <- distHellinger(topic_dist)
-}
-
-#' perform topic modeling using feature vector file
-#' @param labelFile file that contains list labels
-#' @param featureVecFile file that contains feature vectors in sparse representation (row, col, val). Each row is a feature vector for one corresponding query
-#' @param datasetFile file that contains other information about queries (query itself, id, label)
-#' @param numTopic number of topics
-#' @param SEED the random seed for LDA using VEM algorithm
-#' @return the topic model result object
-#' @author Duc Luong
-#' @export
-getTopicModelResult <- function(labelFile, featureVecFile, datasetFile, numTopic, SEED = 2010) {
-  labels <- readLabelFile(labelFile)
-  featureMat <- readFeatureVectors(featureVecFile)
-  dataset <- read.csv(file = datasetFile, header = TRUE, sep = "\t")
-  colnames(featureMat) <- labels
-  rownames(featureMat) <- dataset$id
-  dtm <- as.DocumentTermMatrix(featureMat, weighting = weightTf)
-  VEM <- LDA(dtm, k = numTopic, control = list(seed = SEED, estimate.beta = TRUE))
+  
 }
