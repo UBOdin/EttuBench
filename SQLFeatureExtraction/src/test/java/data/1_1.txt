@@ -1,0 +1,5 @@
+55;SELECT course_id, title FROM course WHERE credits > 3
+1;SELECT course_id, title FROM course WHERE credit > 3
+3;SELECT course_id, title FROM course WHERE credits < 3
+1;SELECT course_id, title, credits FROM course WHERE credits > 3
+1;SELECT id, title FROM course WHERE credits > 3

@@ -1,0 +1,14 @@
+8;SELECT id, name FROM student WHERE name LIKE '' OR name LIKE '' OR name LIKE '' OR name LIKE ''
+37;SELECT student.id, student.name FROM student WHERE lower(student.name) LIKE ''
+30;SELECT s.id, s.name FROM student AS s WHERE lower(s.name) LIKE ''
+1;SELECT id, name FROM student WHERE lower(name) LIKE ('')
+1;SELECT student.id, student.name FROM student WHERE (SELECT upper(name) FROM student AS stud WHERE stud.id = student.id) LIKE ''
+1;SELECT id, name FROM student WHERE upper(name) LIKE upper('')
+1;SELECT name FROM student WHERE lower(name) LIKE ''
+2;SELECT id, name FROM student WHERE upper(name) LIKE ''
+1;SELECT id, name FROM student WHERE name LIKE '' OR name LIKE ''
+1;SELECT name FROM student WHERE upper(name) LIKE ''
+3;SELECT id, name FROM student WHERE name LIKE ''
+1;SELECT id, name FROM student WHERE lower(name) LIKE lower('')
+1;SELECT DISTINCT id, name FROM student WHERE student.name LIKE '' OR student.name LIKE '' OR student.name LIKE '' OR student.name LIKE ''
+1;SELECT student.name FROM student WHERE student.name LIKE ''

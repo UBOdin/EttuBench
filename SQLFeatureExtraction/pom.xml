@@ -1,0 +1,13 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>insiderthreat.odin.cse.buffalo.edu</groupId>
+  <artifactId>SQLFeatureExtraction</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>SQLFeatureExtraction</name>
+  <description>Extract features from SQL queries for comparison and clustering purpose</description>
+  <url>https://github.com/UBOdin/EttuBench/wiki</url>
+  <organization>
+  	<name>UB Odin Lab</name>
+  	<url>odin.cse.buffalo.edu</url>
+  </organization>
+</project>
