@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.List;
 
+import com.google.common.collect.HashMultiset;
+
 import net.sf.jsqlparser.expression.AllComparisonExpression;
 import net.sf.jsqlparser.expression.AnyComparisonExpression;
 import net.sf.jsqlparser.expression.BinaryExpression;
@@ -56,8 +58,9 @@ public class SelectNamingResolver{
 	//canonical names for select body,global
 	public HashMap<SelectBody, Table> CanonicalNames;
 	public SelectBody transformedSelectBody;
-	public static HashMap<String,HashSet<String>> schemaMap=new HashMap<String,HashSet<String>>();
-	public static HashMap<String,HashSet<String>> antiSchemaMap=new HashMap<String,HashSet<String>>();
+	public static HashMap<String,HashMultiset<String>> schemaMap=new HashMap<String,HashMultiset<String>>();
+	public static HashMap<String,HashMultiset<String>> antiSchemaMap=new HashMap<String,HashMultiset<String>>();
+	public static HashSet<Integer> indices=new HashSet<Integer>();
 
 	public SelectNamingResolver(Select input,boolean simplified){
 		selectBodyBelongMap=new IdentityHashMap<SelectBody,SelectBodyNamingResolver>();
@@ -442,9 +445,9 @@ public class SelectNamingResolver{
 		}
 	}
 
-	public static List<String> giveTableNamesInSelectBody(SelectBody body){
+	public static List<String> giveTableNamesInSelectBody(SelectBody body,Integer index){
 		if(body instanceof PlainSelect){
-			return giveTableNamesInPlainSelect((PlainSelect) body);
+			return giveTableNamesInPlainSelect((PlainSelect) body,index);
 		}
 		else{
 			List<String> tablelist=new ArrayList<String>();
@@ -452,24 +455,24 @@ public class SelectNamingResolver{
 			@SuppressWarnings("unchecked")
 			List<PlainSelect> plist=u.getPlainSelects();
 			for(PlainSelect ps: plist){
-				tablelist.addAll(giveTableNamesInPlainSelect(ps));
+				tablelist.addAll(giveTableNamesInPlainSelect(ps,index));
 			}
 			return tablelist;
 		}
 	}
 
-	private static List<String> giveTableNamesInPlainSelect(PlainSelect ps){
+	private static List<String> giveTableNamesInPlainSelect(PlainSelect ps,Integer index){
 		List<String> tablelist=new ArrayList<String>();		
 		//for from items
 		FromItem from=ps.getFromItem();
-		tablelist.addAll(giveTableNamesInFromItem(from,tablelist));
+		tablelist.addAll(giveTableNamesInFromItem(from,tablelist,index));
 
 		//for joins
 		if(ps.getJoins()!=null){
 			@SuppressWarnings("unchecked")
 			List<Join> joins=ps.getJoins();
 			for(Join j:joins)
-				tablelist.addAll(giveTableNamesInJoin(j,tablelist));
+				tablelist.addAll(giveTableNamesInJoin(j,tablelist,index));
 		}
 
 		//for select items
@@ -478,20 +481,20 @@ public class SelectNamingResolver{
 		for (SelectItem sitem:slist){
 			if(sitem instanceof SelectExpressionItem){
 				SelectExpressionItem sexpitem=(SelectExpressionItem) sitem;
-				sexpitem.setExpression(giveTableNamesInExpression(sexpitem.getExpression(), tablelist));
+				sexpitem.setExpression(giveTableNamesInExpression(sexpitem.getExpression(), tablelist,index));
 			}		
 		}
 		//for where clause
 		if(ps.getWhere()!=null)
-			ps.setWhere(giveTableNamesInExpression(ps.getWhere(), tablelist));
+			ps.setWhere(giveTableNamesInExpression(ps.getWhere(), tablelist,index));
 		//for having
 		if(ps.getHaving()!=null)
-			ps.setHaving(giveTableNamesInExpression(ps.getHaving(), tablelist));
+			ps.setHaving(giveTableNamesInExpression(ps.getHaving(), tablelist,index));
 		//for orderby 
 		if(ps.getOrderByElements()!=null){
 			List<OrderByElement> orderbylist=new ArrayList<OrderByElement>();
 			for(OrderByElement ele: orderbylist){
-				ele.setExpression(giveTableNamesInExpression(ele.getExpression(), tablelist));
+				ele.setExpression(giveTableNamesInExpression(ele.getExpression(), tablelist,index));
 			}
 		}
 		//for groupby
@@ -500,32 +503,32 @@ public class SelectNamingResolver{
 			List<Expression> explist=ps.getGroupByColumnReferences();
 			List<Expression> newexplist=new ArrayList<Expression>();
 			for(Expression exp:explist)
-				newexplist.add(giveTableNamesInExpression(exp, tablelist));
+				newexplist.add(giveTableNamesInExpression(exp, tablelist,index));
 			ps.setGroupByColumnReferences(newexplist);
 		}
 		return tablelist;
 
 	}
 
-	private static Expression giveTableNamesInExpression(Expression exp, List<String> tableset){
+	private static Expression giveTableNamesInExpression(Expression exp, List<String> tableset,Integer index){
 		if(exp instanceof BinaryExpression){
 			BinaryExpression bexp=(BinaryExpression) exp;
 			Expression left=bexp.getLeftExpression();
 			Expression right=bexp.getRightExpression();
-			bexp.setLeftExpression(giveTableNamesInExpression(left, tableset));
-			bexp.setRightExpression(giveTableNamesInExpression(right, tableset));
+			bexp.setLeftExpression(giveTableNamesInExpression(left, tableset,index));
+			bexp.setRightExpression(giveTableNamesInExpression(right, tableset,index));
 			return bexp;
 		}
 		else if(exp instanceof AllComparisonExpression){
 			AllComparisonExpression all=(AllComparisonExpression) exp;
 			SubSelect sub=all.getSubSelect();
-			giveTableNamesInSelectBody(sub.getSelectBody());
+			giveTableNamesInSelectBody(sub.getSelectBody(),index);
 			return all;
 		}
 		else if(exp instanceof AnyComparisonExpression){
 			AnyComparisonExpression any=(AnyComparisonExpression) exp;
 			SubSelect sub=any.getSubSelect();
-			giveTableNamesInSelectBody(sub.getSelectBody());
+			giveTableNamesInSelectBody(sub.getSelectBody(),index);
 			return any;
 		}
 		else if(exp instanceof Between){
@@ -533,24 +536,24 @@ public class SelectNamingResolver{
 			Expression left=between.getLeftExpression();
 			Expression start=between.getBetweenExpressionStart();
 			Expression end=between.getBetweenExpressionEnd();
-			between.setLeftExpression(giveTableNamesInExpression(left, tableset));
-			between.setBetweenExpressionStart(giveTableNamesInExpression(start, tableset));
-			between.setBetweenExpressionEnd(giveTableNamesInExpression(end, tableset));
+			between.setLeftExpression(giveTableNamesInExpression(left, tableset,index));
+			between.setBetweenExpressionStart(giveTableNamesInExpression(start, tableset,index));
+			between.setBetweenExpressionEnd(giveTableNamesInExpression(end, tableset,index));
 			return between;
 		}
 		else if (exp instanceof CaseExpression){
 			CaseExpression caseexp=(CaseExpression) exp;
 			Expression elseexp=caseexp.getElseExpression();
 			if(elseexp!=null)
-				caseexp.setElseExpression(giveTableNamesInExpression(caseexp.getElseExpression(), tableset));
+				caseexp.setElseExpression(giveTableNamesInExpression(caseexp.getElseExpression(), tableset,index));
 			Expression sw=caseexp.getSwitchExpression();
 			if(sw!=null)
 				caseexp.setSwitchExpression(caseexp.getSwitchExpression());
 			@SuppressWarnings("unchecked")
 			List<WhenClause> wclist=caseexp.getWhenClauses();
 			for(WhenClause wc:wclist){
-				wc.setThenExpression(giveTableNamesInExpression(wc.getThenExpression(), tableset)); 
-				wc.setWhenExpression(giveTableNamesInExpression(wc.getWhenExpression(), tableset));
+				wc.setThenExpression(giveTableNamesInExpression(wc.getThenExpression(), tableset,index)); 
+				wc.setWhenExpression(giveTableNamesInExpression(wc.getWhenExpression(), tableset,index));
 			}       		 
 			return caseexp;
 		}
@@ -559,15 +562,17 @@ public class SelectNamingResolver{
 			Table t=c.getTable();
 			if(t==null||t.getName()==null){
 				Table matchedTable=findBestMatchedTable(c,tableset);
-				if(matchedTable!=null)
+				if(matchedTable!=null){
 					c.setTable(matchedTable);
+					SelectNamingResolver.indices.add(index);
+				}
 			}
 			 
 			return c;
 		}
 		else if(exp instanceof ExistsExpression){
 			ExistsExpression exists=(ExistsExpression) exp;
-			exists.setRightExpression(giveTableNamesInExpression(exists.getRightExpression(), tableset));
+			exists.setRightExpression(giveTableNamesInExpression(exists.getRightExpression(), tableset,index));
 			return exists;
 		}
 		else if (exp instanceof Function){
@@ -578,44 +583,44 @@ public class SelectNamingResolver{
 				List<Expression> elist=explist.getExpressions();
 				List<Expression> newelist=new ArrayList<Expression>();
 				for(Expression e:elist)
-					newelist.add(giveTableNamesInExpression(e, tableset));
+					newelist.add(giveTableNamesInExpression(e, tableset,index));
 				explist.setExpressions(newelist);
 			}
 			return f;
 		}
 		else if (exp instanceof InExpression){
 			InExpression inexp=(InExpression) exp;
-			inexp.setLeftExpression(giveTableNamesInExpression(inexp.getLeftExpression(), tableset));
+			inexp.setLeftExpression(giveTableNamesInExpression(inexp.getLeftExpression(), tableset,index));
 			ItemsList ilist=inexp.getItemsList();
 			if(ilist instanceof SubSelect){
 				SubSelect sub=(SubSelect) ilist;
-				giveTableNamesInSelectBody(sub.getSelectBody());
+				giveTableNamesInSelectBody(sub.getSelectBody(),index);
 			}
 			return inexp;
 		}
 		else if (exp instanceof InverseExpression){
 			InverseExpression inv=(InverseExpression) exp;
-			inv.setExpression(giveTableNamesInExpression(inv.getExpression(), tableset));
+			inv.setExpression(giveTableNamesInExpression(inv.getExpression(), tableset,index));
 			return inv;
 		}
 		else if (exp instanceof Parenthesis){
 			Parenthesis p=(Parenthesis) exp;
-			p.setExpression(giveTableNamesInExpression(p.getExpression(), tableset));
+			p.setExpression(giveTableNamesInExpression(p.getExpression(), tableset,index));
 			return p;
 		}
 		else if (exp instanceof SubSelect){
 			SubSelect sub=(SubSelect) exp;
-			giveTableNamesInSelectBody(sub.getSelectBody());
+			giveTableNamesInSelectBody(sub.getSelectBody(),index);
 			return sub;
 		}
 		else if (exp instanceof IsNullExpression){
 			IsNullExpression isnull=(IsNullExpression) exp;
-			isnull.setLeftExpression(giveTableNamesInExpression(isnull.getLeftExpression(), tableset));
+			isnull.setLeftExpression(giveTableNamesInExpression(isnull.getLeftExpression(), tableset,index));
 			return isnull;
 		}
 		else if (exp instanceof LikeExpression){
 			LikeExpression like=(LikeExpression) exp;
-			like.setLeftExpression(giveTableNamesInExpression(like.getLeftExpression(), tableset));
+			like.setLeftExpression(giveTableNamesInExpression(like.getLeftExpression(), tableset,index));
 			return like;
 		}         
 		else
@@ -623,23 +628,23 @@ public class SelectNamingResolver{
 
 	}
 
-	private static List<String> giveTableNamesInJoin(Join j,List<String> tset){
+	private static List<String> giveTableNamesInJoin(Join j,List<String> tset,Integer index){
 		List<String> tableset=new ArrayList<String>();
 		List<String> tableset1=new ArrayList<String>();
 		tableset1.addAll(tset);
 		FromItem from=j.getRightItem();
-		tableset.addAll(giveTableNamesInFromItem(from,tableset));
+		tableset.addAll(giveTableNamesInFromItem(from,tableset,index));
 		tableset1.addAll(tableset);
         	
 		if(j.getOnExpression()!=null){
-			j.setOnExpression(giveTableNamesInExpression(j.getOnExpression(), tableset1));
+			j.setOnExpression(giveTableNamesInExpression(j.getOnExpression(), tableset1,index));
 		}
 		if(j.getUsingColumns()!=null){
 			@SuppressWarnings("unchecked")
 			List<Expression> clist=j.getUsingColumns();
 			List<Expression> newclist=new ArrayList<Expression>();
 			for(Expression exp:clist){
-				newclist.add(giveTableNamesInExpression(exp, tableset1));
+				newclist.add(giveTableNamesInExpression(exp, tableset1,index));
 			}
 			j.setUsingColumns(newclist);
 		}	
@@ -647,11 +652,11 @@ public class SelectNamingResolver{
 		return tableset;
 	}
 
-	private static List<String> giveTableNamesInFromItem(FromItem from,List<String> tset){
+	private static List<String> giveTableNamesInFromItem(FromItem from,List<String> tset,Integer index){
 
 		if(from instanceof SubSelect){
 			SubSelect sub=(SubSelect) from;
-			return giveTableNamesInSelectBody(sub.getSelectBody());
+			return giveTableNamesInSelectBody(sub.getSelectBody(),index);
 		}
 		else if (from instanceof SubJoin){
 			List<String> tableset=new ArrayList<String>();
@@ -659,9 +664,9 @@ public class SelectNamingResolver{
 			tableset1.addAll(tset);			
 			SubJoin subj=(SubJoin) from;
 			Join j=subj.getJoin();
-			tableset.addAll(giveTableNamesInFromItem(subj.getLeft(),tableset1));
+			tableset.addAll(giveTableNamesInFromItem(subj.getLeft(),tableset1,index));
 			tableset1.addAll(tableset);			
-			tableset.addAll(giveTableNamesInJoin(j,tableset1));			
+			tableset.addAll(giveTableNamesInJoin(j,tableset1,index));			
 			return tableset;
 		}
 		else {
@@ -673,16 +678,20 @@ public class SelectNamingResolver{
 	}
 
 	private static Table findBestMatchedTable(Column c,List<String> involvedTables){
-		HashSet<String>  candidateTables=antiSchemaMap.get(c.getColumnName());
+		HashMultiset<String>  candidateTables=antiSchemaMap.get(c.getColumnName());
 		if(candidateTables!=null){
+			String bestmatch=null;
+			int occurrence=Integer.MIN_VALUE;
 			for (String tname: involvedTables){
-				if(candidateTables.contains(tname)){
-					Table t=new Table();
-					t.setName(tname);
-					return t;
-				}				
+				int occur= candidateTables.count(tname);
+				   if(occur>0&&occur>occurrence){
+					   occurrence=occur;
+					   bestmatch=tname;
+				   }					   													
 			}
-			return null;
+			Table t=new Table();
+			t.setName(bestmatch);
+			return t;
 		}
 		else return null;
 	}

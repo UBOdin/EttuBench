@@ -52,19 +52,19 @@ public class PredicateNestingCoalescer {
 	private static final Column c = new Column(new Table(), "Multiplicity");
 	private static final BooleanLiteral minusMark = new BooleanLiteral(new FixedOrderExpression(new EqualsTo(c, new LongValue(-1))));
 
-	public static SelectBody predicateNestingCoalesceSelectBody(SelectBody body) {
+	public static SelectBody predicateNestingCoalesceSelectBody(SelectBody body, boolean ignoreAggregate) {
 		//need to do DNFUNION Transformer first
 		body=DNFUNIONTransformer.UnionTransformSelectBody(body);
       // System.out.println("after DNFUnionTransform: "+body);
 		if (body instanceof PlainSelect)
-			return predicateNestingCoalescePlainSelect((PlainSelect) body);
+			return predicateNestingCoalescePlainSelect((PlainSelect) body, true);
 		else {
 			Union u = (Union) body;
 			@SuppressWarnings("unchecked")
 			List<PlainSelect> plist = u.getPlainSelects();
 			List<PlainSelect> newplist = new ArrayList<PlainSelect>();
 			for (PlainSelect ps : plist) {
-				SelectBody b = predicateNestingCoalescePlainSelect(ps);
+				SelectBody b = predicateNestingCoalescePlainSelect(ps, true);
 				if (b instanceof PlainSelect)
 					newplist.add((PlainSelect) b);
 				else {
@@ -79,7 +79,7 @@ public class PredicateNestingCoalescer {
 		}
 	}
 
-	private static SelectBody predicateNestingCoalescePlainSelect(PlainSelect ps) {
+	private static SelectBody predicateNestingCoalescePlainSelect(PlainSelect ps, boolean ignoreAggregate) {
 		// ignore having
 		// search through where clause since this query has already been DNF
 		// normalized
@@ -104,14 +104,18 @@ public class PredicateNestingCoalescer {
 						// remove this literal first
 						it.remove();
 						//regularize exists first
-						sub.setSelectBody(predicateNestingCoalesceSelectBody(sub.getSelectBody()));
+						sub.setSelectBody(predicateNestingCoalesceSelectBody(sub.getSelectBody(), true));
 						//check if the sub-select body contains aggregation or not
 						SelectBody body=sub.getSelectBody();
 						boolean pass=true;
 						if(body instanceof PlainSelect){
 							PlainSelect pps=(PlainSelect) body;
-							if(QueryToolBox.ifContainAggregate(pps))
+							if(QueryToolBox.ifContainAggregate(pps)){
+								if(ignoreAggregate)
+								pass=true;
+								else
 								pass=false;
+							}
 						}
 						else{
 							Union u=(Union) body;
@@ -119,7 +123,11 @@ public class PredicateNestingCoalescer {
 							List<PlainSelect> plist=u.getPlainSelects();
 							for(PlainSelect pps: plist){
 								if(QueryToolBox.ifContainAggregate(pps)){
+									if(ignoreAggregate)
+									pass=true;
+									else
 									pass=false;
+									
 									break;
 								}
 							}
@@ -136,7 +144,7 @@ public class PredicateNestingCoalescer {
 							// for case of EXISTS
 							if (!exists.isNot()) {
 								//regularize host 
-								SelectBody regularizedHost=predicateNestingCoalescePlainSelect(host);
+								SelectBody regularizedHost=predicateNestingCoalescePlainSelect(host, ignoreAggregate);
 
 								if(regularizedHost instanceof PlainSelect){
 									PlainSelect p=(PlainSelect) regularizedHost;
@@ -185,8 +193,8 @@ public class PredicateNestingCoalescer {
 								else{
 									cfq.setWhere(exists);	
 								}
-								SelectBody regularizedpfq=predicateNestingCoalescePlainSelect(pfq);
-								SelectBody regularizedcfq=predicateNestingCoalescePlainSelect(cfq);
+								SelectBody regularizedpfq=predicateNestingCoalescePlainSelect(pfq, ignoreAggregate);
+								SelectBody regularizedcfq=predicateNestingCoalescePlainSelect(cfq, ignoreAggregate);
 								//prepare result
 								Union u=new Union();
 								List<PlainSelect> plist=new ArrayList<PlainSelect>();
@@ -234,7 +242,7 @@ public class PredicateNestingCoalescer {
 								host.setWhere(null);
 							
 							//regularize the rest of the query besides this exists expression
-							SelectBody regularizedHost=predicateNestingCoalescePlainSelect(host);
+							SelectBody regularizedHost=predicateNestingCoalescePlainSelect(host, ignoreAggregate);
 							//add this exists expression back
 							if(regularizedHost instanceof PlainSelect){
 								PlainSelect pps=(PlainSelect) regularizedHost;
@@ -283,7 +291,7 @@ public class PredicateNestingCoalescer {
 	private static void predicateNestingCoalesceFromItem(FromItem from){
 		if(from instanceof SubSelect){
 			SubSelect sub=(SubSelect) from;
-			sub.setSelectBody(predicateNestingCoalesceSelectBody(sub.getSelectBody()));
+			sub.setSelectBody(predicateNestingCoalesceSelectBody(sub.getSelectBody(), true));
 		}
 		else if(from instanceof SubJoin){
 			SubJoin sub=(SubJoin) from;
@@ -353,7 +361,7 @@ public class PredicateNestingCoalescer {
 			//do predicate nesting coalesce to the exists
 			SubSelect sub=(SubSelect) exist.getRightExpression();
 			SelectBody body=sub.getSelectBody();
-			sub.setSelectBody(PredicateNestingCoalescer.predicateNestingCoalesceSelectBody(body));
+			sub.setSelectBody(PredicateNestingCoalescer.predicateNestingCoalesceSelectBody(body, true));
 			return exist;
 		} 
 		else if (exp instanceof InExpression){
@@ -463,14 +471,14 @@ public class PredicateNestingCoalescer {
 		
 		if (right instanceof AllComparisonExpression) {
 			SubSelect sub = ((AllComparisonExpression) right).getSubSelect();
-			SelectBody body=PredicateNestingCoalescer.predicateNestingCoalesceSelectBody(sub.getSelectBody());
+			SelectBody body=PredicateNestingCoalescer.predicateNestingCoalesceSelectBody(sub.getSelectBody(), true);
 			adjustSelectBodyConsiderNotExists(body,bexp);
 			sub.setSelectBody(body);
 			exists.setNot(true); 
 			exists.setRightExpression(sub);
 		} else if (right instanceof AnyComparisonExpression) {
 			SubSelect sub = ((AnyComparisonExpression) right).getSubSelect();
-			SelectBody body=PredicateNestingCoalescer.predicateNestingCoalesceSelectBody(sub.getSelectBody());
+			SelectBody body=PredicateNestingCoalescer.predicateNestingCoalesceSelectBody(sub.getSelectBody(), true);
 			adjustSelectBodyConsiderExists(body,bexp);
 			sub.setSelectBody(body);
 			exists.setNot(false); 
@@ -479,7 +487,7 @@ public class PredicateNestingCoalescer {
 		// treated exactly as ANY comparison
 		else if (right instanceof SubSelect) {
 			SubSelect sub = (SubSelect) right;
-			SelectBody body=PredicateNestingCoalescer.predicateNestingCoalesceSelectBody(sub.getSelectBody());
+			SelectBody body=PredicateNestingCoalescer.predicateNestingCoalesceSelectBody(sub.getSelectBody(), true);
 			adjustSelectBodyConsiderExists(body,bexp);
 			sub.setSelectBody(body);
 			exists.setNot(false); 

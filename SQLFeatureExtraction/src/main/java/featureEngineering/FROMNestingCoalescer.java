@@ -144,11 +144,12 @@ public class FROMNestingCoalescer {
 
 		if(from instanceof SubSelect){
 			SubSelect sub=(SubSelect) from;	
-			//check whether it is an aggregation
+			
 			boolean pass=true;
 			SelectBody body=sub.getSelectBody();
 			if(body instanceof PlainSelect){
 				PlainSelect pps=(PlainSelect) body;
+				//check whether it is an aggregation
 				if(QueryToolBox.ifContainAggregate(pps)){
 					//if this query has only this sub-select as FromItem
 					//we can safely merge
@@ -174,8 +175,8 @@ public class FROMNestingCoalescer {
 				}
 			}
 			else{
-				//we cannot coalece UNION directly, need to pull up UNION first
-				System.out.println("error, UNION should not happen in FromNesting step, need to be pulled up first! "+ps);
+				//TODO
+				System.out.println("UNION happens in FromNesting step, should be pulled up first! "+ps);
 				pass=false;
 				Union u=(Union) body;
 				@SuppressWarnings("unchecked")
@@ -245,8 +246,8 @@ public class FROMNestingCoalescer {
 						}
 					}
 					else{
-						//we cannot coalece UNION directly, need to pull up UNION first
-						System.out.println("error, UNION should not happen in FromNesting step, need to be pulled up first! "+ps);
+						//TODO
+						System.out.println("UNION happens in FromNesting step, should be pulled up first! "+ps);
 						pass=false;
 						Union u=(Union) body;
 						@SuppressWarnings("unchecked")

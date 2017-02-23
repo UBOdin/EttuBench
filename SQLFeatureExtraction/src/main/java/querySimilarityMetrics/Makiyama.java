@@ -27,7 +27,6 @@ import net.sf.jsqlparser.statement.select.WithItem;
 import toolsForMetrics.ExtendedColumn;
 import toolsForMetrics.Global;
 import toolsForMetrics.Schema;
-import toolsForMetrics.SelectItemListParser;
 import toolsForMetrics.Util;
 
 public class Makiyama {
@@ -210,8 +209,7 @@ public class Makiyama {
 					Expression sss = joinlist.get(i).getOnExpression();
 					//System.out.println(sss);
 					if (sss != null) {
-						// pop out the top iter
-						SelectItemListParser.correct(sss, tables);
+				
 						//breaking selection operators with AND
 						List<Expression> selects = Util.processSelect(sss);
 
@@ -317,8 +315,6 @@ public class Makiyama {
 		// 2.check where condition and do selection
 		Expression where = s.getWhere();
 		if (where != null) {
-			// pop out the top iter
-			SelectItemListParser.correct(where, tables);
 			//breaking selection operators with AND
 			List<Expression> selects = Util.processSelect(where);
 
@@ -340,7 +336,6 @@ public class Makiyama {
 		if (groupbyRef != null) {
 			// pop out the top iter
 			for (int i = 0; i < groupbyRef.size(); i++) {
-				SelectItemListParser.correct(groupbyRef.get(i), tables);
 				//breaking selection operators with AND
 				List<Expression> columns = Util.processSelect(groupbyRef.get(i));
 				for (int j = 0; j < columns.size(); j++) {
@@ -360,8 +355,6 @@ public class Makiyama {
 		// 4. check Having clause
 		Expression having = s.getHaving();
 		if (having != null) {
-			// pop out the top iter
-			SelectItemListParser.correct(having, tables);
 			//breaking selection operators with AND
 			List<Expression> selects = Util.processSelect(having);
 
@@ -384,8 +377,7 @@ public class Makiyama {
 			for (int i = 0; i < orderByRef.size(); i++) {
 				//breaking selection operators with AND
 				OrderByElement ord = (OrderByElement) orderByRef.get(i);
-				Expression exp = ord.getExpression();					
-				SelectItemListParser.correct(exp, tables);
+				Expression exp = ord.getExpression();
 				
 				List<Expression> selects = null;
 				try {

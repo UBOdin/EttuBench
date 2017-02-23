@@ -2,9 +2,10 @@ package featureEngineering;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+
+import com.google.common.collect.HashMultiset;
 
 import net.sf.jsqlparser.expression.AllComparisonExpression;
 import net.sf.jsqlparser.expression.AnyComparisonExpression;
@@ -948,16 +949,16 @@ public class PlainSelectNamingResolver{
 		Table t=c.getTable();
 		if(t!=null&&t.getName()!=null&&c.getColumnName()!=null){
 			//register table-col map
-			HashSet<String> columnset=SelectNamingResolver.schemaMap.get(t.getName());
+			HashMultiset<String> columnset=SelectNamingResolver.schemaMap.get(t.getName());
 			if(columnset==null){
-				columnset=new HashSet<String>();
+				columnset=HashMultiset.create();
 				SelectNamingResolver.schemaMap.put(t.getName(), columnset);
 			}    	
 			columnset.add(c.getColumnName());
 			//register col-table map
-			HashSet<String> tableset=SelectNamingResolver.antiSchemaMap.get(c.getColumnName());
+			HashMultiset<String> tableset=SelectNamingResolver.antiSchemaMap.get(c.getColumnName());
 			if(tableset==null){
-				tableset=new HashSet<String>();
+				tableset=HashMultiset.create();
 				SelectNamingResolver.antiSchemaMap.put(c.getColumnName(), tableset);
 			}    	
 			tableset.add(t.getName());

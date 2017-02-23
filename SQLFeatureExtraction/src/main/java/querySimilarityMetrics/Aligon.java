@@ -26,7 +26,6 @@ import net.sf.jsqlparser.statement.select.WithItem;
 import toolsForMetrics.ExtendedColumn;
 import toolsForMetrics.Global;
 import toolsForMetrics.Schema;
-import toolsForMetrics.SelectItemListParser;
 import toolsForMetrics.Util;
 
 public class Aligon {
@@ -297,7 +296,8 @@ public static double getDistanceAsRatio(TreeSet<ExtendedColumn> stmt1projection,
 					//System.out.println(sss);
 					if (sss != null) {
 						// pop out the top iter
-						SelectItemListParser.correct(sss, tables);
+						//TODO
+						//SelectItemListParser.correct(sss, tables);
 						//breaking selection operators with AND
 						List<Expression> selects = Util.processSelect(sss);
 
@@ -380,7 +380,8 @@ public static double getDistanceAsRatio(TreeSet<ExtendedColumn> stmt1projection,
 		Expression where = s.getWhere();
 		if (where != null) {
 			// pop out the top iter
-			SelectItemListParser.correct(where, tables);
+			//TODO
+			//SelectItemListParser.correct(where, tables);
 			//breaking selection operators with AND
 			List<Expression> selects = Util.processSelect(where);
 
@@ -397,7 +398,8 @@ public static double getDistanceAsRatio(TreeSet<ExtendedColumn> stmt1projection,
 		if (groupbyRef != null) {
 			// pop out the top iter
 			for (int i = 0; i < groupbyRef.size(); i++) {
-				SelectItemListParser.correct(groupbyRef.get(i), tables);
+				//TODO
+				//SelectItemListParser.correct(groupbyRef.get(i), tables);
 				//breaking selection operators with AND
 				List<Expression> columns = Util.processSelect(groupbyRef.get(i));
 				for (int j = 0; j < columns.size(); j++) {
@@ -414,7 +416,8 @@ public static double getDistanceAsRatio(TreeSet<ExtendedColumn> stmt1projection,
 		Expression having = s.getHaving();
 		if (having != null) {
 			// pop out the top iter
-			SelectItemListParser.correct(having, tables);
+			//TODO
+			//SelectItemListParser.correct(having, tables);
 			//breaking selection operators with AND
 			List<Expression> selects = Util.processSelect(having);
 

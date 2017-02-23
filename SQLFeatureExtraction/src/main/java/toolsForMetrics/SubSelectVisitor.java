@@ -85,8 +85,6 @@ public class SubSelectVisitor implements SelectVisitor, OrderByVisitor, SelectIt
 					Expression sss = joinlist.get(i).getOnExpression();
 					//System.out.println(sss);
 					if (sss != null) {
-						// pop out the top iter
-						SelectItemListParser.correct(sss, tables);
 						//breaking selection operators with AND
 						List<Expression> selects = Util.processSelect(sss);
 
@@ -161,8 +159,6 @@ public class SubSelectVisitor implements SelectVisitor, OrderByVisitor, SelectIt
 		// 2.check where condition and do selection
 				Expression where = plainSelect.getWhere();
 				if (where != null) {
-					// pop out the top iter
-					SelectItemListParser.correct(where, tables);
 					//breaking selection operators with AND
 					List<Expression> selects = Util.processSelect(where);
 
@@ -180,7 +176,6 @@ public class SubSelectVisitor implements SelectVisitor, OrderByVisitor, SelectIt
 				if (groupbyRef != null) {
 					// pop out the top iter
 					for (int i = 0; i < groupbyRef.size(); i++) {
-						SelectItemListParser.correct(groupbyRef.get(i), tables);
 						//breaking selection operators with AND
 						List<Expression> columns = Util.processSelect(groupbyRef.get(i));
 						for (int j = 0; j < columns.size(); j++) {
@@ -196,8 +191,6 @@ public class SubSelectVisitor implements SelectVisitor, OrderByVisitor, SelectIt
 				// 4. check Having clause
 				Expression having = plainSelect.getHaving();
 				if (having != null) {
-					// pop out the top iter
-					SelectItemListParser.correct(having, tables);
 					//breaking selection operators with AND
 					List<Expression> selects = Util.processSelect(having);
 

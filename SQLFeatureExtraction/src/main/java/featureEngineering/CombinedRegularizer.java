@@ -15,10 +15,10 @@ public class CombinedRegularizer {
 	 * @param input
 	 */
     public static SelectBody regularize(SelectBody body){    	
-   	   body=PredicateNestingCoalescer.predicateNestingCoalesceSelectBody(body); 	   
+   	   body=PredicateNestingCoalescer.predicateNestingCoalesceSelectBody(body, true); 	   
        body=FROMNestingCoalescer.FromNestingCoalesceSelectBody(body);       
-    	body=UNIONPULLer.UnionPullUpFromSelectBody(body, true); 	     
-    	return body;
+       body=UNIONPULLer.UnionPullUpFromSelectBody(body, true); 	     
+       return body;
     }
    
     
