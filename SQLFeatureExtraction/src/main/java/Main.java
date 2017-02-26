@@ -105,7 +105,7 @@ public class Main {
 				    queryComparison(data[i],method[j],queryLists.get(i),modules);
 				}
 				else{
-					for(int k=1;k<5;k++){
+					for(int k=0;k<5;k++){
 						modules=new HashSet<Integer>();
 						modules.add(k);						
 						queryComparison(data[i],method[j],queryLists.get(i),modules);
@@ -122,12 +122,14 @@ public class Main {
 		System.out.println("metric using "+method);
 		if(modules.contains(1))
 			System.out.println("naming module will be applied");
-		else if (modules.contains(2))
+		if (modules.contains(2))
 			System.out.println("Expression Regularization module will be applied");
-		else if(modules.contains(3))
+		if(modules.contains(3))
 			System.out.println("Flattening From-Nesting module will be applied");
-		else if (modules.contains(4))
+		if (modules.contains(4))
 			System.out.println("Union pull-out module will be applied");
+		if(modules.size()==1&&modules.iterator().next()==0)
+			System.out.println("no regularization module will be applied");
 		System.out.println();
 		//parse queries
 		ArrayList<Statement> statementList1 = Utility.convertToStatement(data,datapath,queryList);
