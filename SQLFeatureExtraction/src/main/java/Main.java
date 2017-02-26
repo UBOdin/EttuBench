@@ -128,13 +128,17 @@ public class Main {
 			System.out.println("Flattening From-Nesting module will be applied");
 		if (modules.contains(4))
 			System.out.println("Union pull-out module will be applied");
-		if(modules.size()==1&&modules.iterator().next()==0)
+		boolean regu=true;
+		if(modules.size()==1&&modules.iterator().next()==0){
+			regu=false;
 			System.out.println("no regularization module will be applied");
+		}
 		System.out.println();
 		//parse queries
 		ArrayList<Statement> statementList1 = Utility.convertToStatement(data,datapath,queryList);
 
 		//do a pass of regularization	
+		if(regu){
 		System.out.println("begin regularization");
 		ArrayList<Statement> statementList = new ArrayList<Statement>();
 		long start=System.nanoTime();
@@ -145,12 +149,13 @@ public class Main {
 		long end=System.nanoTime();
 		System.out.println("regularization ended."+" Time used "+(double)(end-start)/1000000+" milisecs");
 		System.out.println();
+		}
 		
 		System.out.println("begin query comparison and clustering. ");
-		start=System.nanoTime();
+		long start=System.nanoTime();
 		// method name can be either aouiche, makiyama or aligon
 		double[][] matrix = Utility.createDistanceMatrix(method, statementList);
-		end=System.nanoTime();
+		long end=System.nanoTime();
 		// write distance matrix to file
 		Utility.WriteDistanceMatrixToFile(matrix, datapath+data+"_"+method+".csv");
 		System.out.println("comparison finished, distance matrix saved to "+datapath+data+"_"+method+".csv"+" Time used "+(double)(end-start)/1000000+" milisecs");
