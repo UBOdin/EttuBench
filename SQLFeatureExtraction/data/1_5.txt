@@ -1,29 +1,52 @@
-37;SELECT DISTINCT dept_name FROM course WHERE credits = (SELECT max(credits) FROM course)
-3;SELECT DISTINCT dept_name FROM course NATURAL JOIN department WHERE credits = (SELECT max(credits) FROM course)
-1;SELECT DISTINCT dept_name FROM course WHERE course_id NOT IN (SELECT course_id FROM course WHERE credits < some (select credits from course))
-1;SELECT DISTINCT department.dept_name FROM department, course WHERE course.dept_name = department.dept_name AND credits = (SELECT max(credits) FROM course)
-1;SELECT DISTINCT dept_name FROM course WHERE (SELECT max(credits) FROM course) = credits
-1;SELECT DISTINCT dept_name FROM (SELECT * FROM (SELECT max(credits) AS maxcred FROM course) a, course WHERE maxcred = credits) b GROUP BY dept_name
-2;SELECT DISTINCT dept_name FROM course WHERE credits IN (SELECT max(credits) FROM course)
-1;SELECT DISTINCT department.dept_name FROM department, course WHERE course.dept_name = department.dept_name AND course.credits IN (SELECT max(credits) FROM course)
-1;SELECT DISTINCT dept_name FROM course, (SELECT max(credits) AS maximum FROM course) tablec WHERE course.credits = tablec.maximum
-3;WITH max_credits AS (SELECT max(credits) AS value FROM course) SELECT DISTINCT dept_name FROM course, max_credits WHERE course.credits = max_credits.value
-1;WITH max_credits AS (SELECT max(credits) AS max_credit FROM course) SELECT DISTINCT dept_name FROM course, max_credits WHERE credits = max_credit
-1;WITH max_credits AS (SELECT max(credits) FROM course) SELECT DISTINCT s.dept_name FROM (SELECT * FROM course NATURAL JOIN department) s, max_credits WHERE s.credits = (SELECT * FROM max_credits)
-1;SELECT DISTINCT dept_name FROM (SELECT * FROM course WHERE credits = all (select max(credits) from course) ) a
-2;SELECT DISTINCT dept_name FROM course, (SELECT max(credits) AS max_credits FROM course) a WHERE course.credits = max_credits
-2;SELECT DISTINCT dept_name FROM department NATURAL JOIN course WHERE credits = (SELECT max(credits) FROM course)
-2;SELECT DISTINCT dept_name FROM course WHERE credits >= net.sf.jsqlparser.expression.AllComparisonExpression@4e25154f
-1;WITH newtab AS (SELECT * FROM department NATURAL JOIN course), maxi AS (SELECT max(credits) AS maximum FROM course) SELECT DISTINCT dept_name FROM newtab, maxi WHERE newtab.credits = maxi.maximum
-1;SELECT DISTINCT dept_name FROM course, (SELECT max(credits) AS max_credits FROM course) c1 WHERE course.credits = c1.max_credits
-1;SELECT DISTINCT dept_name FROM course NATURAL JOIN department WHERE credits = (SELECT max(credits) FROM course)
-1;WITH max_credits AS (SELECT max(credits) FROM course) SELECT DISTINCT dept_name FROM course WHERE course.credits = (SELECT * FROM max_credits)
-1;WITH max1 AS (SELECT max(course.credits) AS maximum FROM course) SELECT DISTINCT course.dept_name FROM course, max1 WHERE course.credits = max1.maximum
-2;WITH max_value AS (SELECT max(credits) FROM course) SELECT DISTINCT dept_name FROM course WHERE credits = (SELECT * FROM max_value)
-1;SELECT course_id FROM course WHERE course.credits = (SELECT max(credits) FROM course)
-1;WITH max_credit AS (SELECT max(credits) AS max_c FROM course) SELECT DISTINCT dept_name FROM course, max_credit WHERE course.credits = max_credit.max_c
-1;WITH rel AS (SELECT max(credits) AS credit FROM course) SELECT DISTINCT course.dept_name FROM rel, course WHERE rel.credit = course.credits
-1;WITH max_credit AS (SELECT max(credits) AS cred FROM course) SELECT DISTINCT dept_name FROM course, max_credit WHERE course.credits = max_credit.cred
-1;SELECT DISTINCT department.dept_name FROM department, course WHERE course.dept_name = department.dept_name AND (course.credits) IN (SELECT max(course.credits) AS maximum FROM course)
-1;SELECT DISTINCT department.dept_name FROM course, department WHERE department.dept_name = course.dept_name AND credits = (SELECT max(course.credits) FROM course)
-1;SELECT DISTINCT department.dept_name FROM department, course WHERE department.dept_name = course.dept_name AND course.credits = (SELECT max(course.credits) AS max_credit FROM course)
+0;select distinct dept_name from course natural join department where credits = (select max(credits) from course)
+0;with max_value as (select max(credits) from course) select distinct dept_name from course where credits = (select * from max_value)
+0;select distinct course.dept_name from course where course.credits = (select max(course.credits) from course)
+0;select distinct dept_name from course where credits=(select max (credits) from course)
+0;select distinct dept_name from course where credits = (select max( credits) from course)
+0;select distinct t.dept_name from course t where t.credits = (select max(credits) from course)
+0;select distinct dept_name from course where credits in (select max(credits) from course )
+0;with max_credits as (select max(credits) from course) select distinct s.dept_name from (select * from course natural join department) s,max_credits where s.credits = (select * from max_credits)
+0;with rel as (select max(credits) credit from course) select distinct course.dept_name from rel,course where rel.credit=course.credits
+0;with max_credit as (select max (credits) cred from course) select distinct dept_name from course,max_credit where course.credits=max_credit.cred
+0;select distinct dept_name from course where credits>=all(select credits from course)
+0;select distinct dept_name from course where course.credits = (select max(credits) from course )
+0;select distinct department.dept_name from department,course where course.dept_name = department.dept_name and (course.credits) in (select max(course.credits) maximum from course )
+0;select distinct department.dept_name from course,department where department.dept_name=course.dept_name and credits= (select max (course.credits) from course)
+0;select distinct dept_name from course where credits in (select max(credits) from course)
+0;select distinct dept_name from course,(select max (credits) as max_credits from course) a where course.credits = max_credits
+0;with newtab as (select * from department natural join course),maxi as (select max(credits) as maximum from course) select distinct dept_name from newtab,maxi where newtab.credits = maxi.maximum
+0;select distinct dept_name from course where credits = (select max(credits) from course)
+0;select distinct dept_name from course,(select max(credits) as max_credits from course) a where course.credits = max_credits
+0;select distinct dept_name from course where credits = (select max(credits) from course )
+0;select distinct dept_name from (course natural join department) where credits = (select max(credits) from course)
+0;select distinct course.dept_name from course where course.credits=(select max(course.credits) from course)
+0;select distinct dept_name from course where (select max(credits) from course) = credits
+0;select distinct dept_name from course u1 where credits = (select max(credits) from course u2)
+0;select distinct dept_name from course where credits=(select max(credits) from course)
+0;select distinct dept_name from (select * from (select max(credits) as maxcred from course) a,course where maxcred=credits) b group by dept_name
+0;select distinct dept_name from course where credits = (select max (credits) from course)
+0;select distinct dept_name from course where course.credits = (select max (credits) from course)
+0;select distinct course.dept_name from course where course.credits = (select max(credits) from course)
+0;select distinct department.dept_name from department,course where course.dept_name=department.dept_name and credits=(select max(credits) from course)
+0;with max_credits as(select max(credits) max_credit from course) select distinct dept_name from course,max_credits where credits=max_credit
+0;select distinct dept_name from department natural join course where course.credits = (select max(credits) from course)
+0;with max_credits as (select max(credits) as value from course) select distinct course.dept_name from course,max_credits where course.credits = max_credits.value
+0;with max_credits as (select max(credits) as value from course) select distinct dept_name from course,max_credits where course.credits = max_credits.value
+0;select distinct dept_name from course where course.credits = (select max (course.credits) from course)
+0;select distinct dept_name from department natural join course where credits = (select max (credits) from course)
+0;select distinct department.dept_name from department,course where department.dept_name = course.dept_name and course.credits = (select max(course.credits) max_credit from course)
+0;select distinct t.dept_name from course t where t.credits = (select max (credits) from course)
+0;select distinct dept_name from course where course_id not in (select course_id from course where credits < some (select credits from course))
+0;select distinct dept_name as maximum from course where credits = (select max(credits) from course)
+0;with max1 as (select max(course.credits) as maximum from course) select distinct course.dept_name from course,max1 where course.credits = max1.maximum
+0;select course_id from course where course.credits = (select max(credits) from course)
+0;select distinct dept_name from ( select * from course where credits = all (select max (credits) from course) ) a
+0;select distinct dept_name from course where credits>=all (select credits from course)
+0;with max_credit as (select max(credits) max_c from course) select distinct dept_name from course,max_credit where course.credits = max_credit.max_c
+0;select distinct dept_name from course,(select max(credits) maximum from course) tablec where course.credits = tablec.maximum
+0;with max_credits as (select max(credits) from course) select distinct dept_name from course where course.credits = (select * from max_credits)
+0;select distinct dept_name from course natural join department where credits = (select max (credits) from course)
+0;select distinct dept_name from course,(select max(credits) max_credits from course) c1 where course.credits=c1.max_credits
+0;select distinct course.dept_name from course where credits = (select max (credits) from course )
+0;select distinct dept_name from course where course.credits = (select max(credits) from course)
+0;select distinct department.dept_name from department,course where course.dept_name=department.dept_name and course.credits in (select max(credits) from course)

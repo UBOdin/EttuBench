@@ -277,12 +277,9 @@ public class BooleanNormalClause{
 					rest=it.next();
 					BinaryExpression bexp;
 					if (this.isDisjunctive)
-						bexp=new OrExpression();
+						bexp=new OrExpression(result,rest.getExpression().getExpression());
 					else
-						bexp=new AndExpression();
-
-					bexp.setLeftExpression(result);
-					bexp.setRightExpression(rest.getExpression().getExpression());
+						bexp=new AndExpression(result,rest.getExpression().getExpression());
 					result=bexp;
 				}
 				return result;

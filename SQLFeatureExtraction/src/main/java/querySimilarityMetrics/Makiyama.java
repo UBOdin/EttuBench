@@ -1,12 +1,13 @@
 package querySimilarityMetrics;
 
+
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.TreeSet;
-
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
@@ -27,8 +28,14 @@ import net.sf.jsqlparser.statement.select.WithItem;
 import toolsForMetrics.ExtendedColumn;
 import toolsForMetrics.Global;
 import toolsForMetrics.Schema;
+import toolsForMetrics.SelectItemListParser;
 import toolsForMetrics.Util;
 
+/**
+ * Query similarity metric Makiyama
+ * @author tingxie
+ *
+ */
 public class Makiyama {
 	
 	private static TreeMap<String, Integer> columnList1 = new TreeMap<String, Integer>();
@@ -40,7 +47,6 @@ public class Makiyama {
 		if (stmt1 instanceof Select) {
 			Select s1=(Select) stmt1;
 			
-			@SuppressWarnings("unchecked")
 			List<WithItem> with1 = s1.getWithItemsList();
 			if (with1 != null) {
 				for (int i = 0; i < with1.size(); i++) {
@@ -88,7 +94,6 @@ public class Makiyama {
 		if (stmt1 instanceof Select && stmt2 instanceof Select) {
 			Select s1=(Select) stmt1;
 			
-			@SuppressWarnings("unchecked")
 			List<WithItem> with1 = s1.getWithItemsList();
 			if (with1 != null) {
 				for (int i = 0; i < with1.size(); i++) {
@@ -98,7 +103,6 @@ public class Makiyama {
 			
 			Select s2=(Select) stmt2;
 			
-			@SuppressWarnings("unchecked")
 			List<WithItem> with2 = s2.getWithItemsList();
 			if (with2 != null) {
 				for (int i = 0; i < with2.size(); i++) {
@@ -165,14 +169,13 @@ public class Makiyama {
 		else if(body instanceof Union){
 			//System.out.println("currently Union does not handle Distinct!");
 			Union u=(Union)body;
-			@SuppressWarnings("unchecked")
 			List<PlainSelect> list= u.getPlainSelects();
 			//executePlainSelect(list.get(0));
 			for (int i = 0; i < list.size(); i++) {
 				executePlainSelect(list.get(i), queryOrder);
 			}
 		}
-		
+
 	}
 	
 	/**
@@ -181,7 +184,7 @@ public class Makiyama {
 	 */
 	@SuppressWarnings("unchecked")
 	private static void executePlainSelect(PlainSelect s, int queryOrder) {
-		//Column c;
+		Column c;
 		List<Table> tables = new ArrayList<Table>();
 		TreeMap<String, Integer> collectiveColumns = new TreeMap<String, Integer>();
 
@@ -209,7 +212,8 @@ public class Makiyama {
 					Expression sss = joinlist.get(i).getOnExpression();
 					//System.out.println(sss);
 					if (sss != null) {
-				
+						// pop out the top iter
+						SelectItemListParser.correct(sss, tables);
 						//breaking selection operators with AND
 						List<Expression> selects = Util.processSelect(sss);
 
@@ -260,11 +264,11 @@ public class Makiyama {
 		
 		List<SelectItem> selectItems = s.getSelectItems();
 		
-		//SelectItemListParser parser = new SelectItemListParser(selectItems, tables);
+		SelectItemListParser parser = new SelectItemListParser(selectItems, tables);
 
 		if (selectItems != null) {
 			// check whether there is any function
-			//int flip = 0;
+			int flip = 0;
 			for (int i = 0; i < selectItems.size(); i++) {
 				SelectItem ss = selectItems.get(i);
 				if (ss instanceof SelectExpressionItem) {
@@ -315,6 +319,8 @@ public class Makiyama {
 		// 2.check where condition and do selection
 		Expression where = s.getWhere();
 		if (where != null) {
+			// pop out the top iter
+			SelectItemListParser.correct(where, tables);
 			//breaking selection operators with AND
 			List<Expression> selects = Util.processSelect(where);
 
@@ -336,6 +342,7 @@ public class Makiyama {
 		if (groupbyRef != null) {
 			// pop out the top iter
 			for (int i = 0; i < groupbyRef.size(); i++) {
+				SelectItemListParser.correct(groupbyRef.get(i), tables);
 				//breaking selection operators with AND
 				List<Expression> columns = Util.processSelect(groupbyRef.get(i));
 				for (int j = 0; j < columns.size(); j++) {
@@ -355,6 +362,8 @@ public class Makiyama {
 		// 4. check Having clause
 		Expression having = s.getHaving();
 		if (having != null) {
+			// pop out the top iter
+			SelectItemListParser.correct(having, tables);
 			//breaking selection operators with AND
 			List<Expression> selects = Util.processSelect(having);
 
@@ -377,10 +386,13 @@ public class Makiyama {
 			for (int i = 0; i < orderByRef.size(); i++) {
 				//breaking selection operators with AND
 				OrderByElement ord = (OrderByElement) orderByRef.get(i);
-				Expression exp = ord.getExpression();
+				Expression exp = ord.getExpression();					
+				SelectItemListParser.correct(exp, tables);
 				
+				Column cc = null;
 				List<Expression> selects = null;
 				try {
+					cc = (Column) exp;
 					selects = Util.processSelect(exp);
 				} catch (Exception ex) {
 					selects = Util.processSelect(exp);

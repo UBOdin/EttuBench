@@ -2,7 +2,7 @@ package booleanFormulaEntities;
 
 import java.util.List;
 
-import featureEngineering.QueryToolBox;
+import Regularization.QueryToolBox;
 import net.sf.jsqlparser.expression.BinaryExpression;
 import net.sf.jsqlparser.expression.CaseExpression;
 import net.sf.jsqlparser.expression.Expression;
@@ -51,17 +51,35 @@ public class FixedOrderExpression {
 			else{
 				if(e instanceof GreaterThan){
 					GreaterThan gt=(GreaterThan) e;
-					if(!gt.isNot())
-					e=new MinorThan(gt.getRightExpression(),gt.getLeftExpression());
-					else
-					e=new MinorThanEquals(gt.getLeftExpression(),gt.getRightExpression());	
+					if(!gt.isNot()){
+						MinorThan mt=new MinorThan();
+						mt.setLeftExpression(gt.getRightExpression());
+						mt.setRightExpression(gt.getLeftExpression());
+					    e=mt;					
+					}
+					else{
+						MinorThanEquals mte=new MinorThanEquals();
+						mte.setLeftExpression(gt.getLeftExpression());
+						mte.setRightExpression(gt.getRightExpression());
+					    e=mte;
+					}
+					
+					
 				}
 				else if (e instanceof GreaterThanEquals){
 					GreaterThanEquals gte=(GreaterThanEquals) e;
-				    if(!gte.isNot())
-					e=new MinorThanEquals(gte.getRightExpression(),gte.getLeftExpression());	
-				    else
-				    e=new MinorThan(gte.getLeftExpression(),gte.getRightExpression());	
+				    if(!gte.isNot()){
+						MinorThanEquals mte=new MinorThanEquals();
+						mte.setLeftExpression(gte.getRightExpression());
+						mte.setRightExpression(gte.getLeftExpression());
+					    e=mte;
+				    }
+				    else{
+						MinorThan mt=new MinorThan();
+						mt.setLeftExpression(gte.getLeftExpression());
+						mt.setRightExpression(gte.getRightExpression());
+					    e=mt;	
+				    }
 				}
 				else if (e instanceof EqualsTo){
 					EqualsTo eq=(EqualsTo) e;

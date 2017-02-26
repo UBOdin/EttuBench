@@ -1,23 +1,31 @@
-1;SELECT id, name, course_id FROM instructor FULL OUTER JOIN teaches USING (id)
-27;SELECT DISTINCT id, name, course_id FROM instructor LEFT OUTER JOIN teaches
-8;SELECT id, name, course_id FROM instructor LEFT OUTER JOIN teaches
-4;SELECT DISTINCT id, name, course_id FROM instructor LEFT OUTER JOIN teaches
-1;SELECT DISTINCT instructor.id, instructor.name, teaches.course_id FROM teaches RIGHT OUTER JOIN instructor ON instructor.id = teaches.id
-1;SELECT id, name, course_id FROM instructor LEFT OUTER JOIN teaches GROUP BY id, name, course_id
-3;SELECT DISTINCT instructor.id, name, teaches.course_id FROM instructor LEFT OUTER JOIN teaches ON (instructor.id = teaches.id)
-6;SELECT DISTINCT instructor.id, instructor.name, teaches.course_id FROM instructor LEFT OUTER JOIN teaches ON instructor.id = teaches.id
-1;SELECT DISTINCT * FROM (SELECT id, name FROM instructor) b LEFT OUTER JOIN (SELECT id, course_id FROM teaches) a
-1;SELECT DISTINCT id, name, course_id FROM instructor LEFT OUTER JOIN teaches USING (id)
-1;SELECT DISTINCT id, name, course_id FROM instructor LEFT JOIN teaches
-1;SELECT id, name, course_id FROM instructor LEFT OUTER JOIN teaches
-2;SELECT instructor.id, name, course_id FROM instructor LEFT OUTER JOIN teaches ON instructor.id = teaches.id
-1;SELECT DISTINCT name, course_id FROM instructor LEFT OUTER JOIN teaches
-1;SELECT DISTINCT t.id, t.name, t.course_id FROM (SELECT * FROM (SELECT * FROM instructor LEFT OUTER JOIN teaches) section) t
-1;SELECT id, name, course_id FROM instructor NATURAL JOIN teaches
-1;SELECT DISTINCT id, name, course_id FROM instructor NATURAL JOIN teaches
-1;SELECT DISTINCT instructor.id, instructor.name, teaches.course_id FROM instructor LEFT OUTER JOIN teaches ON teaches.id = instructor.id
-1;SELECT instructor.id, instructor.name, teaches.course_id FROM instructor LEFT OUTER JOIN teaches ON (teaches.id = instructor.id)
-1;SELECT DISTINCT id, name, course_id FROM teaches RIGHT OUTER JOIN instructor
-2;SELECT DISTINCT id, name, course_id FROM teaches RIGHT OUTER JOIN instructor
-1;SELECT DISTINCT * FROM (SELECT instructor.id, instructor.name FROM instructor) a LEFT OUTER JOIN (SELECT teaches.id, teaches.course_id FROM teaches) b
-1;SELECT DISTINCT id, name, course_id FROM instructor NATURAL JOIN teaches
+0;select id,name,course_id from instructor left outer join teaches group by id,name,course_id
+0;select id,instructor.name,course_id from instructor left outer join teaches
+0;select distinct id,name,course_id from instructor left join teaches
+0;select id,name,course_id from (instructor left outer join teaches)
+0;select distinct instructor.id,instructor.name,teaches.course_id from instructor left outer join teaches on teaches.id = instructor.id
+0;select distinct id,name,course_id from (instructor natural join teaches) union ((select id,name,null from instructor) except (select id,name,null from (instructor natural join teaches)))
+0;select instructor.id,name,course_id from instructor left outer join teaches on instructor.id = teaches.id
+0;select distinct id,name,course_id from instructor natural join teaches
+0;select distinct instructor.id,instructor.name,teaches.course_id from instructor left outer join teaches on (instructor.id = teaches.id)
+0;select distinct id,instructor.name,teaches.course_id from instructor left outer join teaches
+0;select distinct * from ((select instructor.id,instructor.name from instructor) a left outer join (select teaches.id,teaches.course_id from teaches) b)
+0;select id,name,course_id from instructor left outer join teaches
+0;select distinct id,name,course_id from teaches right outer join instructor
+0;select distinct instructor.id,instructor.name,teaches.course_id from teaches right outer join instructor on instructor.id = teaches.id
+0;select id,name,course_id from instructor left join teaches
+0;select distinct t.id,t.name,t.course_id from (select * from (select * from instructor left outer join teaches) section) t
+0;select distinct id,name,course_id from (instructor left outer join teaches)
+0;select id,name,course_id from instructor natural join teaches
+0;select distinct instructor.id,instructor.name,course_id from instructor left outer join teaches on (instructor.id = teaches.id)
+0;select distinct id,name,course_id from instructor left outer join teaches using (id)
+0;select distinct instructor.id,instructor.name,teaches.course_id from instructor left outer join teaches on instructor.id=teaches.id
+0;select distinct * from ((select id,name from instructor) b left outer join(select id,course_id from teaches) a)
+0;select distinct instructor.id,instructor.name,teaches.course_id from instructor left outer join teaches on instructor.id = teaches.id
+0;select id,name,course_id from instructor full outer join teaches using (id)
+0;select distinct id,name,course_id from (teaches right outer join instructor)
+0;select instructor.id,instructor.name,teaches.course_id from instructor left outer join teaches on (teaches.id=instructor.id )
+0;select distinct id,name,course_id from instructor left outer join teaches
+0;select distinct instructor.id,name,course_id from instructor left outer join teaches on instructor.id = teaches.id
+0;select distinct id,name,teaches.course_id from instructor left outer join teaches
+0;select distinct instructor.id,name,teaches.course_id from instructor left outer join teaches on (instructor.id = teaches.id)
+0;select distinct name,course_id from instructor left outer join teaches

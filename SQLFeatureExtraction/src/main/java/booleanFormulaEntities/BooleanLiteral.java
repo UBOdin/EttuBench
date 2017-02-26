@@ -1,6 +1,6 @@
 package booleanFormulaEntities;
 
-import featureEngineering.QueryToolBox;
+import Regularization.QueryToolBox;
 import net.sf.jsqlparser.expression.AllComparisonExpression;
 import net.sf.jsqlparser.expression.AnyComparisonExpression;
 import net.sf.jsqlparser.expression.BinaryExpression;
@@ -18,10 +18,10 @@ import net.sf.jsqlparser.expression.operators.relational.MinorThanEquals;
 import net.sf.jsqlparser.expression.operators.relational.NotEqualsTo;
 
 /**
- * defines a boolean literal in any boolean formula.
+ * defines any boolean literal in any boolean formula.
  * input should be fixedOrderExpression
- * since A>B is the same as B<A, this class is responsible for keeping a uniform way of expressing it as B<A
- * it is also responsible for keeping a fixed order of left and right hand side for expression like A=B <=> B=A 
+ * since A > B is the same as B < A, this class is responsible for keeping a uniform way of expressing it as B < A
+ * , it is also responsible for keeping a fixed order of left and right hand side for expression like A = B and B = A 
  * @author tingxie
  *
  */

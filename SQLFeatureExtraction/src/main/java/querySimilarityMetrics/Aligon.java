@@ -26,28 +26,33 @@ import net.sf.jsqlparser.statement.select.WithItem;
 import toolsForMetrics.ExtendedColumn;
 import toolsForMetrics.Global;
 import toolsForMetrics.Schema;
+import toolsForMetrics.SelectItemListParser;
 import toolsForMetrics.Util;
 
+/**
+ * Query similarity metric Aligon
+ * @author tingxie
+ *
+ */
 public class Aligon {
 
-	private static TreeSet<ExtendedColumn> projectionList1 = new TreeSet<ExtendedColumn>();
-	private static TreeSet<ExtendedColumn> projectionList2 = new TreeSet<ExtendedColumn>();
+	private static TreeSet<ExtendedColumn> projectionList1 = new TreeSet<>();
+	private static TreeSet<ExtendedColumn> projectionList2 = new TreeSet<>();
 	
-	private static TreeSet<ExtendedColumn> groupbyList1 = new TreeSet<ExtendedColumn>();
-	private static TreeSet<ExtendedColumn> groupbyList2 = new TreeSet<ExtendedColumn>();
+	private static TreeSet<ExtendedColumn> groupbyList1 = new TreeSet<>();
+	private static TreeSet<ExtendedColumn> groupbyList2 = new TreeSet<>();
 	
-	private static TreeSet<ExtendedColumn> selectionList1 = new TreeSet<ExtendedColumn>();
-	private static TreeSet<ExtendedColumn> selectionList2 = new TreeSet<ExtendedColumn>();
+	private static TreeSet<ExtendedColumn> selectionList1 = new TreeSet<>();
+	private static TreeSet<ExtendedColumn> selectionList2 = new TreeSet<>();
 	
 	public static void createQueryVector(Statement stmt1) {
-		projectionList1 = new TreeSet<ExtendedColumn>();
-		groupbyList1 = new TreeSet<ExtendedColumn>();
-		selectionList1 = new TreeSet<ExtendedColumn>();
+		projectionList1 = new TreeSet<>();
+		groupbyList1 = new TreeSet<>();
+		selectionList1 = new TreeSet<>();
 
 		if (stmt1 instanceof Select) {
 			Select s1=(Select) stmt1;
 			
-			@SuppressWarnings("unchecked")
 			List<WithItem> with1 = s1.getWithItemsList();
 			if (with1 != null) {
 				for (int i = 0; i < with1.size(); i++) {
@@ -141,19 +146,18 @@ public static double getDistanceAsRatio(TreeSet<ExtendedColumn> stmt1projection,
 	
 	public static double getDistanceAsRatio(Statement stmt1, Statement stmt2) {
 		
-		projectionList1 = new TreeSet<ExtendedColumn>();
-		projectionList2 = new TreeSet<ExtendedColumn>();
+		projectionList1 = new TreeSet<>();
+		projectionList2 = new TreeSet<>();
 		
-		groupbyList1 = new TreeSet<ExtendedColumn>();
-		groupbyList2 = new TreeSet<ExtendedColumn>();
+		groupbyList1 = new TreeSet<>();
+		groupbyList2 = new TreeSet<>();
 		
-		selectionList1 = new TreeSet<ExtendedColumn>();
-		selectionList2 = new TreeSet<ExtendedColumn>();
+		selectionList1 = new TreeSet<>();
+		selectionList2 = new TreeSet<>();
 
 		if (stmt1 instanceof Select && stmt2 instanceof Select) {
 			Select s1=(Select) stmt1;
 			
-			@SuppressWarnings("unchecked")
 			List<WithItem> with1 = s1.getWithItemsList();
 			if (with1 != null) {
 				for (int i = 0; i < with1.size(); i++) {
@@ -163,7 +167,6 @@ public static double getDistanceAsRatio(TreeSet<ExtendedColumn> stmt1projection,
 			
 			Select s2=(Select) stmt2;
 			
-			@SuppressWarnings("unchecked")
 			List<WithItem> with2 = s2.getWithItemsList();
 			if (with2 != null) {
 				for (int i = 0; i < with2.size(); i++) {
@@ -249,14 +252,12 @@ public static double getDistanceAsRatio(TreeSet<ExtendedColumn> stmt1projection,
 		else if(body instanceof Union){
 			//System.out.println("currently Union does not handle Distinct!");
 			Union u=(Union)body;
-			@SuppressWarnings("unchecked")
 			List<PlainSelect> list= u.getPlainSelects();
 			//executePlainSelect(list.get(0));
 			for (int i = 0; i < list.size(); i++) {
 				executePlainSelect(list.get(i), queryOrder);
 			}
 		}
-
 	}
 	
 	/**
@@ -265,6 +266,7 @@ public static double getDistanceAsRatio(TreeSet<ExtendedColumn> stmt1projection,
 	 */
 	@SuppressWarnings("unchecked")
 	private static void executePlainSelect(PlainSelect s, int queryOrder) {
+		Column c;
 		List<Table> tables = new ArrayList<Table>();
 		HashSet<ExtendedColumn> groupByColumns = new HashSet<ExtendedColumn>();
 		HashSet<ExtendedColumn> selectionColumns = new HashSet<ExtendedColumn>();
@@ -296,8 +298,7 @@ public static double getDistanceAsRatio(TreeSet<ExtendedColumn> stmt1projection,
 					//System.out.println(sss);
 					if (sss != null) {
 						// pop out the top iter
-						//TODO
-						//SelectItemListParser.correct(sss, tables);
+						SelectItemListParser.correct(sss, tables);
 						//breaking selection operators with AND
 						List<Expression> selects = Util.processSelect(sss);
 
@@ -339,11 +340,11 @@ public static double getDistanceAsRatio(TreeSet<ExtendedColumn> stmt1projection,
 		
 		List<SelectItem> selectItems = s.getSelectItems();
 		
-		//SelectItemListParser parser = new SelectItemListParser(selectItems, tables);
+		SelectItemListParser parser = new SelectItemListParser(selectItems, tables);
 
 		if (selectItems != null) {
 			// check whether there is any function
-			//int flip = 0;
+			int flip = 0;
 			for (int i = 0; i < selectItems.size(); i++) {
 				SelectItem ss = selectItems.get(i);
 				if (ss instanceof SelectExpressionItem) {
@@ -380,8 +381,7 @@ public static double getDistanceAsRatio(TreeSet<ExtendedColumn> stmt1projection,
 		Expression where = s.getWhere();
 		if (where != null) {
 			// pop out the top iter
-			//TODO
-			//SelectItemListParser.correct(where, tables);
+			SelectItemListParser.correct(where, tables);
 			//breaking selection operators with AND
 			List<Expression> selects = Util.processSelect(where);
 
@@ -398,8 +398,7 @@ public static double getDistanceAsRatio(TreeSet<ExtendedColumn> stmt1projection,
 		if (groupbyRef != null) {
 			// pop out the top iter
 			for (int i = 0; i < groupbyRef.size(); i++) {
-				//TODO
-				//SelectItemListParser.correct(groupbyRef.get(i), tables);
+				SelectItemListParser.correct(groupbyRef.get(i), tables);
 				//breaking selection operators with AND
 				List<Expression> columns = Util.processSelect(groupbyRef.get(i));
 				for (int j = 0; j < columns.size(); j++) {
@@ -416,8 +415,7 @@ public static double getDistanceAsRatio(TreeSet<ExtendedColumn> stmt1projection,
 		Expression having = s.getHaving();
 		if (having != null) {
 			// pop out the top iter
-			//TODO
-			//SelectItemListParser.correct(having, tables);
+			SelectItemListParser.correct(having, tables);
 			//breaking selection operators with AND
 			List<Expression> selects = Util.processSelect(having);
 

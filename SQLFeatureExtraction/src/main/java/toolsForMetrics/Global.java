@@ -1,10 +1,11 @@
 package toolsForMetrics;
 
+
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import net.sf.jsqlparser.expression.BooleanValue;
 import net.sf.jsqlparser.expression.DateValue;
 import net.sf.jsqlparser.expression.DoubleValue;
@@ -22,10 +23,14 @@ import net.sf.jsqlparser.statement.create.table.Index;
 import net.sf.jsqlparser.statement.select.AllTableColumns;
 
 
-//FINISHED
-//Stores some Global information about tables and their schemas
+/**
+ * Stores some Global information about tables and their schemas
+ * @author tingxie
+ *
+ */
+
 public class Global {
-	//public static Environment env = null;
+//	public static Environment env = null;
 	
 	public static final double eps=0.000001;
 	public static File dataDir = null;
@@ -34,7 +39,7 @@ public class Global {
 	public static List<File> sqlFiles = null;
     public static long MaxMem;
 //    public static Statistics statistics = new Statistics();
-	public  static HashMap<String, CreateTable> tables = new HashMap<String, CreateTable>();
+	public  static HashMap<String, CreateTable> tables = new HashMap<>();
 	public  static HashMap<String, String> tableAlias = null;
 	
 //	public static ProgramMode programMode = ProgramMode.QUERY_MODE;
@@ -93,7 +98,7 @@ public class Global {
 //	 public static Environment getCurrentEnvironment() {
 //		 return env;
 //	 }
-	 
+//	 
 //	 /**
 //	  * Function that turn Token read from the disk into tuple
 //	  * @param tokens
@@ -335,7 +340,6 @@ public class Global {
 				Table t=tables.get(i);
 				CreateTable ct=Global.tables.get(t.getName());
 				if (ct != null) {
-					@SuppressWarnings("unchecked")
 					List<ColumnDefinition> colDef=ct.getColumnDefinitions();
 					for (int j=0;j<colDef.size();j++){
 						if (colDef.get(j).getColumnName().equals(c.getColumnName())){
@@ -353,7 +357,6 @@ public class Global {
 			if (flip==0){
 				for(HashMap.Entry<String, CreateTable> entry : Global.tables.entrySet()){
 					CreateTable ct=entry.getValue();
-					@SuppressWarnings("unchecked")
 					List<ColumnDefinition> colDef=ct.getColumnDefinitions();
 					for (int j=0;j<colDef.size();j++){
 						if (colDef.get(j).getColumnName().equals(c.getColumnName()))	
@@ -373,8 +376,7 @@ public class Global {
 	public static Schema findOutAllTableColumns(AllTableColumns all,Global global){
 		Schema schema=new Schema();
 		String tname=all.getTable().getName();
-		CreateTable ct=Global.tables.get(tname);
-		@SuppressWarnings("unchecked")
+		CreateTable ct=global.tables.get(tname);
 		List<ColumnDefinition> colDef=ct.getColumnDefinitions();
 		for (int i=0;i<colDef.size();i++){
 			Column c=new Column();
@@ -394,7 +396,6 @@ public class Global {
 		Schema schema=new Schema();
 		String tname=all.getTable().getName();
 		CreateTable ct=Global.tables.get(tname);
-		@SuppressWarnings("unchecked")
 		List<ColumnDefinition> colDef=ct.getColumnDefinitions();
 		for (int i=0;i<colDef.size();i++){
 			Column c=new Column();
@@ -424,44 +425,43 @@ public class Global {
 //		return retVal;
 //	}
 
-//	private static boolean findOutIfForeignKey(Column column) {
-//		int index = findOutColumnIndexInTable(column);
-//		
-//		String dummyValue = tableForeignKeys.get(column.getTable().getName().toUpperCase()).get(index);
-//		
-//		if (dummyValue == null || dummyValue.equals("")) {
-//			return false;
-//		}
-//		else {
-//			return true;
-//		}
-//		
-//	}
+	private static boolean findOutIfForeignKey(Column column) {
+		int index = findOutColumnIndexInTable(column);
+		
+		String dummyValue = tableForeignKeys.get(column.getTable().getName().toUpperCase()).get(index);
+		
+		if (dummyValue == null || dummyValue.equals("")) {
+			return false;
+		}
+		else {
+			return true;
+		}
+		
+	}
 
-//	private static int findOutColumnIndexInTable(Column column) {
-//		return tableSchemas.get(column.getTable().getName().toUpperCase()).get(column.getColumnName());
-//	}
+	private static int findOutColumnIndexInTable(Column column) {
+		return tableSchemas.get(column.getTable().getName().toUpperCase()).get(column.getColumnName());
+	}
 
-//	private static int findOutIfPrimaryKey(Column column) {
-//		List<Index> listOfIndexes = tableIndex.get(column.getTable().getName());
-//		
-//		for (Index index : listOfIndexes) {
-//			@SuppressWarnings("unchecked")
-//			List<String> columnNames = index.getColumnsNames();
-//			if (columnNames.contains(column.getColumnName())) {
-//				int index1 = findOutColumnIndexInTable(column);
-//				String dummyValue = tableForeignKeys.get(column.getTable().getName().toUpperCase()).get(index1);
-//				if (dummyValue == null || dummyValue.equals("")) {
-//					return 1;
-//				}
-//				else {
-//					return 0;
-//				}
-//			}
-//		}
-//		
-//		return -1;
-//	}
+	private static int findOutIfPrimaryKey(Column column) {
+		List<Index> listOfIndexes = tableIndex.get(column.getTable().getName());
+		
+		for (Index index : listOfIndexes) {
+			List<String> columnNames = index.getColumnsNames();
+			if (columnNames.contains(column.getColumnName())) {
+				int index1 = findOutColumnIndexInTable(column);
+				String dummyValue = tableForeignKeys.get(column.getTable().getName().toUpperCase()).get(index1);
+				if (dummyValue == null || dummyValue.equals("")) {
+					return 1;
+				}
+				else {
+					return 0;
+				}
+			}
+		}
+		
+		return -1;
+	}
 	
 	
 

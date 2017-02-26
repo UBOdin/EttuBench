@@ -24,9 +24,7 @@ import net.sf.jsqlparser.statement.select.SelectItemVisitor;
 import net.sf.jsqlparser.statement.select.SelectVisitor; 
 import net.sf.jsqlparser.statement.select.SubJoin; 
 import net.sf.jsqlparser.statement.select.SubSelect; 
-import net.sf.jsqlparser.statement.select.Union;
-import toolsForMetrics.ColumnExpressionVisitor;
-import toolsForMetrics.Util; 
+import net.sf.jsqlparser.statement.select.Union; 
 
 /**
  * A class to de-parse (that is, tranform from JSqlParser hierarchy into a string) a 
@@ -69,7 +67,6 @@ public class SubSelectVisitor implements SelectVisitor, OrderByVisitor, SelectIt
 		FromItem fromitem = plainSelect.getFromItem();
 		
 		if (fromitem != null) {
-			@SuppressWarnings("unchecked")
 			List<Join> joinlist = plainSelect.getJoins();
 
 			if (joinlist == null || joinlist.isEmpty()) {
@@ -85,6 +82,8 @@ public class SubSelectVisitor implements SelectVisitor, OrderByVisitor, SelectIt
 					Expression sss = joinlist.get(i).getOnExpression();
 					//System.out.println(sss);
 					if (sss != null) {
+						// pop out the top iter
+						SelectItemListParser.correct(sss, tables);
 						//breaking selection operators with AND
 						List<Expression> selects = Util.processSelect(sss);
 
@@ -104,18 +103,15 @@ public class SubSelectVisitor implements SelectVisitor, OrderByVisitor, SelectIt
 
 		List<SelectItem> distinctItems = null;
 		
-		if (plainSelect.getDistinct() != null) {
-			@SuppressWarnings("unchecked")
-			List<SelectItem> items=plainSelect.getDistinct().getOnSelectItems();
-			distinctItems = items;
-		}
+		if (plainSelect.getDistinct() != null) 
+			distinctItems = plainSelect.getDistinct().getOnSelectItems();
 		
 		if (distinctItems != null) {
 			
-//			SelectItemListParser parserDistinct = new SelectItemListParser(distinctItems, tables);
+			SelectItemListParser parserDistinct = new SelectItemListParser(distinctItems, tables);
 
 			// check whether there is any function
-			//int flip = 0;
+			int flip = 0;
 			for (int i = 0; i < distinctItems.size(); i++) {
 				SelectItem ss = distinctItems.get(i);
 				if (ss instanceof SelectExpressionItem) {
@@ -132,14 +128,13 @@ public class SubSelectVisitor implements SelectVisitor, OrderByVisitor, SelectIt
 			}
 		}
 		
-		@SuppressWarnings("unchecked")
 		List<SelectItem> selectItems = plainSelect.getSelectItems();
 		
-//		SelectItemListParser parserSelect = new SelectItemListParser(selectItems, tables);
+		SelectItemListParser parserSelect = new SelectItemListParser(selectItems, tables);
 
 		if (selectItems != null) {
 			// check whether there is any function
-			//int flip = 0;
+			int flip = 0;
 			for (int i = 0; i < selectItems.size(); i++) {
 				SelectItem ss = selectItems.get(i);
 				if (ss instanceof SelectExpressionItem) {
@@ -159,6 +154,8 @@ public class SubSelectVisitor implements SelectVisitor, OrderByVisitor, SelectIt
 		// 2.check where condition and do selection
 				Expression where = plainSelect.getWhere();
 				if (where != null) {
+					// pop out the top iter
+					SelectItemListParser.correct(where, tables);
 					//breaking selection operators with AND
 					List<Expression> selects = Util.processSelect(where);
 
@@ -171,11 +168,11 @@ public class SubSelectVisitor implements SelectVisitor, OrderByVisitor, SelectIt
 				}
 
 				// 3. check group by and corresponding aggregation
-				@SuppressWarnings("unchecked")
 				List<Expression> groupbyRef = plainSelect.getGroupByColumnReferences();
 				if (groupbyRef != null) {
 					// pop out the top iter
 					for (int i = 0; i < groupbyRef.size(); i++) {
+						SelectItemListParser.correct(groupbyRef.get(i), tables);
 						//breaking selection operators with AND
 						List<Expression> columns = Util.processSelect(groupbyRef.get(i));
 						for (int j = 0; j < columns.size(); j++) {
@@ -191,6 +188,8 @@ public class SubSelectVisitor implements SelectVisitor, OrderByVisitor, SelectIt
 				// 4. check Having clause
 				Expression having = plainSelect.getHaving();
 				if (having != null) {
+					// pop out the top iter
+					SelectItemListParser.correct(having, tables);
 					//breaking selection operators with AND
 					List<Expression> selects = Util.processSelect(having);
 
@@ -205,8 +204,7 @@ public class SubSelectVisitor implements SelectVisitor, OrderByVisitor, SelectIt
 	} 
 
 	public void visit(Union union) { 
-		for (@SuppressWarnings("unchecked")
-		Iterator<PlainSelect> iter = union.getPlainSelects().iterator(); iter.hasNext();) { 
+		for (Iterator<PlainSelect> iter = union.getPlainSelects().iterator(); iter.hasNext();) { 
 			buffer.append("("); 
 			PlainSelect plainSelect = iter.next(); 
 			plainSelect.accept(this); 
@@ -221,9 +219,7 @@ public class SubSelectVisitor implements SelectVisitor, OrderByVisitor, SelectIt
 		} 
 
 		if (union.getOrderByElements() != null) { 
-			@SuppressWarnings("unchecked")
-			List<OrderByElement> olist=union.getOrderByElements();
-			deparseOrderBy(olist); 
+			deparseOrderBy(union.getOrderByElements()); 
 		} 
 
 		if (union.getLimit() != null) { 
@@ -359,8 +355,7 @@ public class SubSelectVisitor implements SelectVisitor, OrderByVisitor, SelectIt
 		} 
 		if (join.getUsingColumns() != null) { 
 			buffer.append(" USING ("); 
-			for (@SuppressWarnings("unchecked")
-			Iterator<Column> iterator = join.getUsingColumns().iterator(); iterator.hasNext();) { 
+			for (Iterator<Column> iterator = join.getUsingColumns().iterator(); iterator.hasNext();) { 
 				Column column = iterator.next(); 
 				buffer.append(column.getWholeColumnName()); 
 				if (iterator.hasNext()) { 
@@ -391,7 +386,6 @@ public class SubSelectVisitor implements SelectVisitor, OrderByVisitor, SelectIt
 				((PlainSelect)temp.getSelectBody()).accept(this);
 			} else {
 				Union union = (Union)temp.getSelectBody();
-				@SuppressWarnings("unchecked")
 				List<PlainSelect> select_list = union.getPlainSelects();
 				for (PlainSelect select : select_list) {
 					select.accept(this);

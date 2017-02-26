@@ -6,15 +6,16 @@ import java.util.Set;
 
 /**
  * this class hides details about the actual representation of a feature vector
- * you can use given methods to modify the content of this vector 
+ * and provides a uniform representation
  * @author tingxie
  *
  */
 public class FeatureVector{
     private HashMap<Integer,Integer> labelMap=new HashMap<Integer,Integer>();
+    
     /**
      * add one feature into this vector
-     * @param featureID
+     * @param featureID int-valued based ID 
      */
     public void addOneFeatureIn(int featureID){
     	Integer occur=this.labelMap.get(featureID);
@@ -30,8 +31,8 @@ public class FeatureVector{
     
     /**
      * add the same feature with multiple occurrrences in
-     * @param featureID
-     * @param occurrence
+     * @param featureID int-based ID
+     * @param occurrence number of times a feature occurs
      */
     public void addFeatureWithOccurrence(int featureID, int occurrence){
     	if(occurrence>0){
@@ -47,9 +48,10 @@ public class FeatureVector{
     	}
     }
     
-    /**
-     * add the content of whole input feature vector into this vector
-     */
+/**
+ * add the content of whole input feature vector into this vector
+ * @param input a FeatureVector
+ */
     public void addWholeFeatureVectorIn(FeatureVector input){
     	for (Entry<Integer,Integer> en: input.labelMap.entrySet()){
              int featureID=en.getKey();
@@ -62,11 +64,11 @@ public class FeatureVector{
     	}
     }
        
-    /**
-     * get the occurrence number of input feature in this vector
-     * @param featureID
-     * @return
-     */
+/**
+ * get the occurrence number of input feature in this vector
+ * @param featureID int-based ID
+ * @return returns 0 if feature not found
+ */
     public int getFeatureOccurrence(int featureID){
     	Integer result=this.labelMap.get(featureID);
     	if(result==null)
@@ -77,7 +79,7 @@ public class FeatureVector{
     
     /**
      * get the set of distinct features out from this vector
-     * @return
+     * @return a set of distinct features
      */
     public Set<Integer> getDistinctFeatures(){ 
     	return this.labelMap.keySet();

@@ -1,56 +1,66 @@
-1;SELECT course.course_id, course.title, takes.id FROM course, section, takes WHERE course.course_id = section.course_id AND section.year = 2010 AND section.semester = '' AND course.course_id = takes.course_id AND takes.semester = ''
-1;SELECT course.course_id, course.title, instructor.id FROM course, instructor, takes WHERE course.dept_name = instructor.dept_name AND takes.course_id = course.course_id AND takes.semester = '' AND takes.year = ''
-1;SELECT DISTINCT course.course_id, course.title, teaches.id FROM course, teaches WHERE course.course_id = teaches.course_id AND teaches.semester = '' AND teaches.year = ''
-2;SELECT course.course_id, course.title, teaches.id FROM course, teaches WHERE course.course_id = teaches.course_id AND teaches.year = 2010 AND teaches.semester = ''
-1;SELECT course.course_id, title, instructor.id FROM course, instructor, teaches WHERE teaches.id = instructor.id AND course.course_id = teaches.course_id AND teaches.semester = '' AND teaches.year = 2010
-4;SELECT course.course_id, course.title, teaches.id FROM course, teaches WHERE course.course_id = teaches.course_id AND semester = '' AND year = ''
-5;SELECT course.course_id, course.title, teaches.id FROM course, teaches WHERE course.course_id = teaches.course_id AND semester = '' AND year = 2010
-3;SELECT course_id, course.title, id AS instructor_id FROM course NATURAL JOIN teaches WHERE semester = '' AND year = 2010
-1;SELECT course.course_id, course.title, teaches.id FROM teaches, course WHERE teaches.year = '' AND teaches.semester = '' AND teaches.course_id = course.course_id
-1;SELECT section.course_id, course.title, teaches.id FROM section, course, teaches WHERE section.course_id = teaches.course_id AND section.sec_id = teaches.sec_id AND section.semester = teaches.semester AND section.year = teaches.year AND section.course_id = course.course_id AND section.semester = '' AND section.year = 2010
-1;SELECT DISTINCT course.course_id, course.title, teaches.id FROM course, teaches WHERE course.course_id = teaches.course_id AND teaches.semester = '' AND teaches.year = 2010
-1;SELECT DISTINCT course.course_id, title, id FROM course, teaches WHERE course.course_id = teaches.course_id AND year = 2010 AND semester = ''
-1;SELECT course.course_id, course.title, teaches.id FROM course, teaches WHERE teaches.course_id = course.course_id AND teaches.semester = '' AND teaches.year = ''
-2;SELECT course.course_id, title, id FROM course, teaches WHERE semester = '' AND year = '' AND course.course_id = teaches.course_id
-1;SELECT section.course_id, course.title, teaches.id FROM section, course, teaches WHERE section.semester = '' AND section.year = 2010 AND teaches.course_id = section.course_id AND course.course_id = section.course_id
-1;SELECT course.course_id, course.title, teaches.id FROM teaches, course WHERE teaches.semester = '' AND teaches.year = 2010 AND teaches.course_id = course.course_id
-1;SELECT section.course_id, teaches.id, course.title FROM section, course, teaches WHERE section.year = 2010 AND section.semester = '' AND section.course_id = course.course_id AND section.course_id = teaches.course_id
-1;SELECT course_id, title, id FROM course NATURAL JOIN teaches NATURAL JOIN section WHERE semester = '' AND year = ''
-1;SELECT course.course_id, course.title, teaches.id FROM course, section, teaches WHERE course.course_id = section.course_id AND section.sec_id = teaches.sec_id AND teaches.course_id = section.course_id AND section.semester = teaches.semester AND section.year = teaches.year AND course.course_id = teaches.course_id AND section.semester = '' AND section.year = 2010
-1;SELECT DISTINCT course.course_id, title, id FROM course, teaches, section WHERE section.year = 2010 AND section.course_id = course.course_id AND teaches.course_id = course.course_id AND teaches.semester = ''
-2;SELECT teaches.course_id, title, id AS instructor_id FROM teaches, course WHERE semester = '' AND year = 2010 AND teaches.course_id = course.course_id
-1;SELECT section.course_id, course.course_id, teaches.id FROM section, course, teaches WHERE section.semester = '' AND section.year = '' AND course.course_id = section.course_id AND teaches.course_id = section.course_id AND teaches.sec_id = section.sec_id AND teaches.semester = '' AND teaches.year = ''
-1;SELECT course.course_id, title, id FROM course JOIN teaches ON course.course_id = teaches.course_id AND teaches.semester = '' AND teaches.year = ''
-1;SELECT teaches.course_id, course.title, teaches.id FROM course, teaches WHERE (teaches.semester = '' AND teaches.year = 2010) AND (course.course_id = teaches.course_id)
-1;SELECT teaches.course_id, course.title, teaches.id FROM teaches, section, course WHERE teaches.course_id = section.course_id AND section.course_id = course.course_id AND teaches.year = section.year AND teaches.sec_id = section.sec_id AND teaches.semester = section.semester AND teaches.semester = '' AND teaches.year = 2010
-1;SELECT DISTINCT course.course_id, course.title, teaches.id FROM course, section, teaches WHERE course.course_id = section.course_id AND section.course_id = teaches.course_id AND section.sec_id = teaches.sec_id AND section.year = teaches.year AND section.semester = teaches.semester AND section.semester = '' AND section.year = 2010
-1;SELECT teaches.course_id, course.title, teaches.id FROM teaches, course WHERE (teaches.course_id = course.course_id) AND (teaches.year = '' AND teaches.semester = '')
-1;SELECT teaches.course_id, title, id AS professor_id, semester FROM teaches, course WHERE teaches.course_id = course.course_id AND semester = '' AND year = ''
-1;SELECT teaches.id, teaches.course_id, course.course_id FROM teaches, course WHERE teaches.course_id = course.course_id AND year = 2010 AND semester = ''
-1;SELECT teaches.course_id, title, id FROM course, teaches WHERE year = '' AND semester = '' AND teaches.course_id = course.course_id
-1;SELECT teaches.course_id, course.title, teaches.id FROM teaches, course, section WHERE course.course_id = section.course_id AND section.course_id = teaches.course_id AND section.sec_id = teaches.sec_id AND section.semester = teaches.semester AND section.year = teaches.year AND section.semester = '' AND section.year = 2010
-1;SELECT course_id, title, id FROM teaches NATURAL JOIN section NATURAL JOIN course WHERE semester = '' AND year = 2010
-1;SELECT teaches.course_id, title, id FROM teaches, course WHERE course.course_id = teaches.course_id AND teaches.semester = '' AND teaches.year = 2010
-1;SELECT teaches.course_id, course.title, teaches.id AS instructorid FROM course, instructor, teaches WHERE teaches.id = instructor.id AND teaches.course_id = course.course_id AND teaches.semester = '' AND teaches.year = ''
-1;SELECT DISTINCT course.course_id, title, id FROM course, teaches, section WHERE section.year = 2010 AND teaches.semester = '' AND section.course_id = course.course_id AND teaches.course_id = course.course_id
-2;SELECT section.course_id, course.title, teaches.id FROM course, section, teaches WHERE section.course_id = course.course_id AND section.course_id = teaches.course_id AND section.sec_id = teaches.sec_id AND section.semester = teaches.semester AND section.year = teaches.year AND section.semester = '' AND section.year = ''
-1;SELECT course.course_id, title, id AS instructor_id FROM teaches, course WHERE course.course_id = teaches.course_id AND teaches.year = 2010 AND teaches.semester = ''
-2;SELECT teaches.course_id, course.title, teaches.id FROM teaches, course WHERE teaches.semester = '' AND teaches.year = '' AND teaches.course_id = course.course_id
-1;SELECT DISTINCT teaches.course_id, course.title, teaches.id FROM teaches, course, takes WHERE teaches.semester = '' AND teaches.year = '' AND course.course_id = teaches.course_id
-1;SELECT DISTINCT course.course_id, course.title, teaches.id FROM course, section, teaches WHERE section.year = 2010 AND section.semester = '' AND section.course_id = course.course_id AND teaches.course_id = section.course_id AND teaches.sec_id = section.sec_id AND teaches.semester = section.semester AND teaches.year = section.year
-1;SELECT course.course_id, course.title, instructor.id FROM teaches, course, instructor WHERE course.course_id = teaches.course_id AND instructor.id = teaches.id AND teaches.semester = '' AND teaches.year = 2010
-1;SELECT teaches.course_id, course.title, teaches.id FROM teaches, course WHERE course.course_id = teaches.course_id AND teaches.year = '' AND teaches.semester = ''
-1;SELECT course.course_id, title, teaches.id FROM course, teaches WHERE semester = '' AND year = 2010 AND course.course_id = teaches.course_id
-2;SELECT course_id, title, instructor.id FROM teaches, course WHERE teaches.course_id = course.course_id AND teaches.semester = '' AND teaches.year = ''
-1;SELECT teaches.course_id, course.title, teaches.id FROM course, teaches WHERE course.course_id = teaches.course_id AND teaches.year = 2010 AND teaches.semester = ''
-1;SELECT teaches.course_id, title, id FROM course, teaches WHERE teaches.course_id = course.course_id AND year = 2010 AND semester = ''
-1;SELECT course.course_id, teaches.id, course.title FROM course, teaches WHERE teaches.semester = '' AND teaches.year = ''
-1;SELECT course.course_id, course.title, instructor.id FROM course, instructor, section WHERE section.year = 2010 AND section.semester = ''
-1;SELECT course_id, title, id FROM course NATURAL JOIN instructor NATURAL JOIN teaches WHERE semester = '' AND year = 2010
-1;SELECT teaches.id, teaches.course_id, course.title FROM teaches, course WHERE teaches.semester = '' AND teaches.year = '' AND teaches.course_id = course.course_id
-1;SELECT DISTINCT teaches.course_id, course.title, teaches.id AS instructor_id FROM course, instructor, teaches, section WHERE teaches.course_id = section.course_id AND section.course_id = course.course_id AND instructor.id = teaches.id AND teaches.year = '' AND teaches.semester = ''
-1;SELECT course_id, title, id AS instructor_id FROM course NATURAL JOIN teaches WHERE semester = '' AND year = ''
-1;SELECT teaches.course_id, course.title, instructor.name FROM course, instructor, teaches WHERE course.course_id = teaches.course_id AND teaches.year = 2010 AND teaches.semester = '' AND teaches.id = instructor.id
-1;SELECT course.course_id, course.title, instructor.id FROM instructor, teaches, section, course WHERE instructor.id = teaches.id AND teaches.course_id = section.course_id AND teaches.sec_id = section.sec_id AND teaches.semester = section.semester AND teaches.year = section.year AND section.course_id = course.course_id AND section.year = 2010 AND section.semester = ''
-1;SELECT course.course_id, title, id FROM course, teaches WHERE semester = '' AND year = '' AND teaches.course_id = course.course_id
-1;SELECT course.course_id, course.title, teaches.id FROM section, teaches, course WHERE course.course_id = section.course_id AND teaches.course_id = section.course_id AND teaches.sec_id = section.sec_id AND teaches.semester = section.semester AND teaches.year = section.year AND section.semester = '' AND section.year = 2010
+0;select course_id,title,id from course natural join instructor natural join teaches where semester = 'spring' and year = 2010
+0;select course.course_id,course.title,teaches.id from course,teaches where course.course_id = teaches.course_id and teaches.year = 2010 and teaches.semester = 'spring'
+0;select course.course_id,title,id from course join teaches on course.course_id = teaches.course_id and teaches.semester = 'spring' and teaches.year = '2010'
+0;select teaches.course_id,title,id as professor_id,semester from teaches,course where teaches.course_id = course.course_id and semester = 'spring' and year = '2010'
+0;select course.course_id,course.title,id from course natural join teaches where semester = 'spring' and year = 2010
+0;select course.course_id,title,id from course,teaches where semester='spring' and year='2010' and teaches.course_id=course.course_id
+0;select teaches.course_id,title,id from teaches,course where semester = 'spring' and year = 2010 and teaches.course_id = course.course_id
+0;select teaches.course_id,course.title,teaches.id from teaches,course where course.course_id=teaches.course_id and teaches.year='2010' and teaches.semester='spring'
+0;select section.course_id,course.title,teaches.id from section,course,teaches where section.course_id = teaches.course_id and section.sec_id = teaches.sec_id and section.semester = teaches.semester and section.year = teaches.year and section.course_id = course.course_id and section.semester = 'spring' and section.year = 2010
+0;select course.course_id,course.title,teaches.id from course,teaches where teaches.course_id=course.course_id and teaches.semester='spring' and teaches.year='2010'
+0;select distinct course.course_id,course.title,teaches.id from course,section,teaches where course.course_id = section.course_id and section.course_id = teaches.course_id and section.sec_id = teaches.sec_id and section.year = teaches.year and section.semester = teaches.semester and section.semester = 'spring' and section.year = 2010
+0;select teaches.course_id,course.title,teaches.id from teaches,course where (teaches.course_id = course.course_id) and (teaches.year = '2010' and teaches.semester = 'spring')
+0;select course.course_id,course.title,instructor.id from course,instructor,takes where course.dept_name=instructor.dept_name and takes.course_id=course.course_id and takes.semester='spring' and takes.year='2010'
+0;select section.course_id,course.title,teaches.id from course,section,teaches where section.course_id=course.course_id and section.course_id=teaches.course_id and section.sec_id=teaches.sec_id and section.semester=teaches.semester and section.year=teaches.year and section.semester='spring' and section.year='2010'
+0;select course.course_id,title,teaches.id from course,teaches where semester = 'spring' and year = 2010 and course.course_id = teaches.course_id
+0;select course.course_id,teaches.id,course.title from course,teaches where teaches.semester='spring' and teaches.year='2010'
+0;select section.course_id,teaches.id,course.title from section,course,teaches where section.year = 2010 and section.semester = 'spring' and section.course_id = course.course_id and section.course_id = teaches.course_id
+0;select course_id,title,instructor.id from teaches,course where teaches.course_id = course.course_id and teaches.semester ='spring' and teaches.year = '2010'
+0;select distinct course.course_id,title,id from course,teaches,section where section.year = 2010 and section.course_id = course.course_id and teaches.course_id = course.course_id and teaches.semester= 'spring'
+0;select teaches.course_id,course.title,teaches.id from teaches,course,section where course.course_id=section.course_id and section.course_id=teaches.course_id and section.sec_id=teaches.sec_id and section.semester=teaches.semester and section.year=teaches.year and section.semester='spring' and section.year=2010
+0;select teaches.course_id,course.title,teaches.id from teaches,course where teaches.semester = 'spring' and teaches.year = '2010' and teaches.course_id = course.course_id
+0;select course.course_id,title,id from course,teaches where semester = 'spring' and year = '2010'and course.course_id=teaches.course_id
+0;select course.course_id,course.title,instructor.id from teaches,course,instructor where course.course_id=teaches.course_id and instructor.id= teaches.id and teaches.semester='spring' and teaches.year=2010
+0;select distinct teaches.course_id,course.title,teaches.id as instructor_id from course,instructor,teaches,section where teaches.course_id = section.course_id and section.course_id = course.course_id and instructor.id = teaches.id and teaches.year = '2010' and teaches.semester = 'spring'
+0;select course.course_id,course.title,teaches.id from teaches,course where teaches.year = '2010' and teaches.semester = 'spring' and teaches.course_id = course.course_id
+0;select distinct course.course_id,course.title,teaches.id from course,teaches where course.course_id=teaches.course_id and teaches.semester='spring' and teaches.year=2010
+0;select teaches.course_id,course.title,teaches.id as instructorid from course,instructor,teaches where teaches.id = instructor.id and teaches.course_id = course.course_id and teaches.semester = 'spring' and teaches.year = '2010'
+0;select course_id,title,id from course natural join teaches natural join section where semester='spring' and year='2010'
+0;select distinct course.course_id,title,id from course,teaches,section where section.year=2010 and teaches.semester='spring' and section.course_id = course.course_id and teaches.course_id=course.course_id
+0;select distinct teaches.course_id,course.title,teaches.id from teaches,course,takes where teaches.semester='spring' and teaches.year='2010' and course.course_id = teaches.course_id
+0;select course.course_id,title,id instructor_id from teaches,course where course.course_id=teaches.course_id and teaches.year=2010 and teaches.semester='spring'
+0;select distinct course.course_id,title,id from course,teaches where course.course_id=teaches.course_id and year = 2010 and semester='spring'
+0;select course.course_id,course.title,teaches.id from course,teaches where course.course_id = teaches.course_id and semester='spring' and year=2010
+0;select teaches.course_id,course.title,teaches.id from course,teaches where (teaches.semester = 'spring' and teaches.year = 2010) and (course.course_id = teaches.course_id)
+0;select teaches.course_id,title,id from teaches,course where course.course_id = teaches.course_id and teaches.semester = 'spring' and teaches.year = 2010
+0;select course.course_id,title,instructor.id from course,instructor,teaches where teaches.id=instructor.id and course.course_id=teaches.course_id and teaches.semester='spring' and teaches.year=2010
+0;select section.course_id,course.title,teaches.id from section,course,teaches where section.semester = 'spring' and section.year = 2010 and teaches.course_id = section.course_id and course.course_id = section.course_id
+0;select course_id,course.title,id instructor_id from course natural join teaches where semester = 'spring' and year = 2010
+0;select course.course_id,title,teaches.id from course,teaches where course.course_id=teaches.course_id and teaches.semester='spring' and teaches.year='2010'
+0;select teaches.course_id,course.title,teaches.id from course,teaches where course.course_id = teaches.course_id and teaches.year = 2010 and teaches.semester = 'spring'
+0;select teaches.course_id,title,id from teaches,course where teaches.course_id = course.course_id and semester = 'spring' and year = '2010'
+0;select distinct course.course_id,course.title,teaches.id from course,teaches where course.course_id=teaches.course_id and teaches.semester='spring' and teaches.year='2010'
+0;select teaches.id,teaches.course_id,course.title from teaches,course where teaches.semester='spring' and teaches.year='2010' and teaches.course_id=course.course_id
+0;select course.course_id,title,teaches.id from course,teaches where semester = 'spring' and year = '2010' and course.course_id = teaches.course_id
+0;select teaches.course_id,course.title,teaches.id from teaches,section,course where teaches.course_id = section.course_id and section.course_id = course.course_id and teaches.year = section.year and teaches.sec_id = section.sec_id and teaches.semester = section.semester and teaches.semester = 'spring' and teaches.year = 2010
+0;select teaches.course_id,title,id from course,teaches where year = '2010' and semester = 'spring' and teaches.course_id = course.course_id
+0;select course.course_id,course.title,instructor.id from instructor,teaches,section,course where instructor.id = teaches.id and teaches.course_id = section.course_id and teaches.sec_id = section.sec_id and teaches.semester = section.semester and teaches.year = section.year and section.course_id = course.course_id and section.year = 2010 and section.semester = 'spring'
+0;select course.course_id,course.title,teaches.id from course,teaches where course.course_id = teaches.course_id and teaches.semester = 'spring' and teaches.year= 2010
+0;select course.course_id,course.title,teaches.id from course,section,teaches where course.course_id=section.course_id and section.sec_id=teaches.sec_id and teaches.course_id = section.course_id and section.semester = teaches.semester and section.year = teaches.year and course.course_id = teaches.course_id and section.semester = 'spring' and section.year = 2010
+0;select course.course_id,course.title,teaches.id from section,teaches,course where course.course_id = section.course_id and teaches.course_id = section.course_id and teaches.sec_id = section.sec_id and teaches.semester = section.semester and teaches.year = section.year and section.semester = 'spring' and section.year = 2010
+0;select course.course_id,course.title,instructor.id from course,instructor,section where section.year=2010 and section.semester='spring'
+0;select teaches.course_id,title,id instructor_id from teaches,course where semester = 'spring' and year = 2010 and teaches.course_id = course.course_id
+0;select course.course_id,course.title,teaches.id from course,teaches where course.course_id = teaches.course_id and teaches.semester = 'spring' and teaches.year = '2010'
+0;select distinct course.course_id,course.title,teaches.id from course,section,teaches where section.year=2010 and section.semester='spring' and section.course_id=course.course_id and teaches.course_id=section.course_id and teaches.sec_id=section.sec_id and teaches.semester=section.semester and teaches.year=section.year
+0;select course_id,title,id from course natural join teaches where semester='spring' and year=2010
+0;select teaches.id,teaches.course_id,course.course_id from teaches,course where teaches.course_id = course.course_id and year = 2010 and semester = 'spring'
+0;select course.course_id,course.title,teaches.id from course,teaches where course.course_id = teaches.course_id and teaches.semester = 'spring' and teaches.year = 2010
+0;select section.course_id,course.course_id,teaches.id from section,course,teaches where section.semester = 'spring' and section.year = '2010' and course.course_id = section.course_id and teaches.course_id = section.course_id and teaches.sec_id = section.sec_id and teaches.semester = 'spring' and teaches.year = '2010'
+0;select course.course_id,course.title,teaches.id from course,teaches where course.course_id=teaches.course_id and teaches.semester='spring' and teaches.year='2010'
+0;select course.course_id,course.title,teaches.id from course,teaches where course.course_id = teaches.course_id and semester = 'spring' and year = '2010'
+0;select teaches.course_id,title,id from course,teaches where teaches.course_id = course.course_id and year = 2010 and semester = 'spring'
+0;select course.course_id,course.title,teaches.id from teaches,course where teaches.semester='spring' and teaches.year=2010 and teaches.course_id=course.course_id
+0;select teaches.course_id,course.title,instructor.name from course,instructor,teaches where course.course_id = teaches.course_id and teaches.year = 2010 and teaches.semester = 'spring' and teaches.id=instructor.id
+0;select course_id,title,id as instructor_id from course natural join teaches where semester='spring' and year='2010'
+0;select course_id,title,id from teaches natural join section natural join course where semester = 'spring' and year = 2010
+0;select course.course_id,course.title,takes.id from course,section,takes where course.course_id = section.course_id and section.year = 2010 and section.semester = 'spring' and course.course_id = takes.course_id and takes.semester = 'spring'

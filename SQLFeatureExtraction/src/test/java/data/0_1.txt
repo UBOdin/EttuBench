@@ -1,3 +1,0 @@
-51;SELECT course_id, title FROM course
-1;SELECT course_id FROM course
-2;SELECT DISTINCT course_id, title FROM course

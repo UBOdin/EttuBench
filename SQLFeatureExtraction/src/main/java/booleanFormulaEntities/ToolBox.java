@@ -29,9 +29,18 @@ import net.sf.jsqlparser.expression.operators.relational.NotEqualsTo;
 public class ToolBox {
 	public static final String[] placeholders=new String[]{"?",""," ","  ","''","' '","\"\"","\" \""};
 	public static final HashSet<String> placeholderset=new HashSet<String>(Arrays.asList(placeholders));
-	public static final EqualsTo tautology=new EqualsTo(new LongValue(1),new LongValue(1));
-	public static final NotEqualsTo contradiction=new NotEqualsTo(new LongValue(1),new LongValue(1));
-	
+	public static final EqualsTo tautology=new EqualsTo();
+    static
+    {
+    	tautology.setLeftExpression(new LongValue("1"));
+    	tautology.setRightExpression(new LongValue("1"));
+    }
+	public static final NotEqualsTo contradiction=new NotEqualsTo();
+    static
+    {
+    	contradiction.setLeftExpression(new LongValue("1"));
+    	contradiction.setRightExpression(new LongValue("1"));
+    }
 	public static boolean checkIfContainsPlaceHolder(Expression exp){
 		if (exp!=null){
 			if (exp instanceof BinaryExpression){

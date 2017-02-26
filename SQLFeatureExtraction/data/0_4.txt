@@ -1,30 +1,51 @@
-14;SELECT DISTINCT id, name FROM student NATURAL JOIN takes WHERE takes.course_id = ''
-14;SELECT DISTINCT student.id, student.name FROM student, takes WHERE student.id = takes.id AND takes.course_id = ''
-4;SELECT DISTINCT id, name FROM takes NATURAL JOIN student WHERE course_id = ''
-7;SELECT student.id, student.name FROM student, takes WHERE student.id = takes.id AND takes.course_id = ''
-2;SELECT DISTINCT takes.id, student.name FROM takes, student WHERE takes.id = student.id AND takes.course_id = ''
-3;SELECT id, name FROM student NATURAL JOIN takes WHERE course_id = ''
-4;SELECT DISTINCT student.id, student.name FROM student, takes WHERE takes.id = student.id AND takes.course_id = ''
-3;SELECT DISTINCT student.id, student.name FROM student, takes WHERE takes.course_id = '' AND student.id = takes.id
-1;SELECT DISTINCT takes.id, name FROM takes, student WHERE student.id = takes.id AND course_id = ''
-2;SELECT DISTINCT id, name FROM student NATURAL JOIN takes WHERE course_id = ''
-1;SELECT DISTINCT student.name FROM student, takes WHERE student.id = takes.id AND takes.course_id = ''
-1;SELECT takes.id, name FROM student, takes WHERE takes.id = student.id AND takes.course_id = ''
-2;SELECT takes.id, student.name FROM takes, student WHERE takes.course_id = '' AND takes.id = student.id
-3;SELECT DISTINCT student.id, student.name FROM takes, student WHERE takes.course_id = '' AND takes.id = student.id
-1;SELECT DISTINCT student.id, student.name FROM student, takes WHERE takes.course_id = '' AND takes.id = student.id
-2;SELECT student.id, student.name FROM takes, student WHERE takes.id = student.id AND takes.course_id = ''
-1;SELECT DISTINCT student.id, student.name FROM takes, student WHERE student.id = takes.id AND course_id = ''
-1;SELECT * FROM (SELECT id FROM takes WHERE course_id = '') arbit JOIN (SELECT name, id FROM student) arbit1 ON arbit.id = arbit1.id
-1;SELECT DISTINCT takes.id, student.name FROM student, takes WHERE takes.id = student.id AND takes.course_id = ''
-1;SELECT student.id, student.name FROM student, takes WHERE takes.course_id = '' AND takes.id = student.id
-1;SELECT DISTINCT takes.id, student.name FROM student, takes WHERE student.id = takes.id AND takes.course_id = ''
-1;SELECT id FROM student NATURAL JOIN takes WHERE course_id = ''
-1;SELECT student.id, student.name FROM student, takes WHERE takes.id = student.id AND takes.course_id = ''
-1;SELECT student.id, student.name FROM student, takes WHERE student.id = takes.id AND takes.course_id = '' AND takes.year < 2011
-1;SELECT student.id, name FROM student, course, takes WHERE (student.id = takes.id AND course.course_id = takes.course_id) AND takes.course_id = ''
-1;SELECT student.id, student.name FROM takes, student WHERE takes.course_id = '' AND takes.id = student.id
-1;SELECT DISTINCT takes.id, student.name FROM takes, student WHERE takes.course_id = '' AND takes.id = student.id
-1;SELECT DISTINCT student.id, student.name FROM student, takes WHERE takes.course_id = ''
-1;SELECT student.id, name FROM student, takes WHERE course_id = '' AND student.id = takes.id
-1;SELECT id, name FROM takes NATURAL JOIN student WHERE course_id = ''
+0;select distinct takes.id,student.name from takes,student where takes.id = student.id and takes.course_id = 'cs-101'
+0;select id,name from takes natural join student where course_id = 'cs-101'
+0;select takes.id,student.name from takes,student where takes.course_id = 'cs-101' and takes.id = student.id
+0;select student.id,student.name from student,takes where takes.course_id = 'cs-101' and takes.id = student.id
+0;select student.id,name from student,course,takes where (student.id=takes.id and course.course_id=takes.course_id) and takes.course_id='cs-101'
+0;select distinct id,name from student natural join takes where course_id='cs-101'
+0;select distinct student.id,student.name from student,takes where student.id=takes.id and course_id='cs-101'
+0;select distinct id,name from student natural join takes where takes.course_id= 'cs-101'
+0;select distinct student.id,name from student,takes where takes.course_id = 'cs-101' and student.id = takes.id
+0;select distinct student.id,student.name from takes,student where student.id=takes.id and course_id='cs-101'
+0;select distinct id,name from student natural join takes where course_id = 'cs-101'
+0;select student.id,name from student,takes where student.id = takes.id and takes.course_id = 'cs-101'
+0;select student.id,student.name from student,takes where student.id=takes.id and takes.course_id='cs-101' and takes.year < 2011
+0;select student.id,student.name from takes,student where takes.course_id='cs-101' and takes.id=student.id
+0;select student.id,student.name from takes,student where takes.id=student.id and takes.course_id='cs-101'
+0;select distinct id,name from student natural join takes where takes.course_id = 'cs-101'
+0;select student.id,student.name from student,takes where student.id = takes.id and course_id = 'cs-101'
+0;select distinct student.id,student.name from student,takes where student.id = takes.id and takes.course_id = 'cs-101'
+0;select student.id,name from student,takes where student.id=takes.id and course_id='cs-101'
+0;select student.id,student.name from student,takes where student.id = takes.id and takes.course_id = 'cs-101'
+0;select distinct id,name from (student natural join takes ) where course_id = 'cs-101'
+0;select takes.id,name from student,takes where takes.id=student.id and takes.course_id='cs-101'
+0;select distinct student.id,name from student,takes where takes.id=student.id and takes.course_id='cs-101'
+0;select distinct takes.id,student.name from student,takes where student.id = takes.id and takes.course_id='cs-101'
+0;select id,name from student natural join takes where course_id='cs-101'
+0;select distinct takes.id,student.name from takes,student where takes.id=student.id and takes.course_id='cs-101'
+0;select * from (select id from takes where course_id ='cs-101') arbit join (select name,id from student) arbit1 on arbit.id=arbit1.id
+0;select distinct id,name from (student natural join takes) where course_id = 'cs-101'
+0;select student.id,name from student,takes where course_id = 'cs-101'and student.id = takes.id
+0;select distinct student.id,student.name from student,takes where takes.id = student.id and takes.course_id = 'cs-101'
+0;select distinct takes.id,student.name from takes,student where takes.course_id = 'cs-101' and takes.id = student.id
+0;select distinct id,name from student natural join takes where takes.course_id='cs-101'
+0;select distinct student.id,name from student,takes where course_id='cs-101' and student.id=takes.id
+0;select distinct student.id,name from student,takes where takes.id = student.id and course_id = 'cs-101'
+0;select distinct student.name from student,takes where student.id=takes.id and takes.course_id='cs-101'
+0;select student.id,student.name from student,takes where student.id=takes.id and course_id='cs-101'
+0;select student.id,student.name from takes,student where takes.id = student.id and takes.course_id = 'cs-101'
+0;select distinct student.id,student.name from student,takes where student.id=takes.id and takes.course_id='cs-101'
+0;select distinct student.id,student.name from takes,student where takes.course_id = 'cs-101' and takes.id = student.id
+0;select distinct id,name from takes natural join student where course_id='cs-101'
+0;select distinct id,name from takes natural join student where course_id = 'cs-101'
+0;select distinct student.id,student.name from student,takes where takes.course_id='cs-101' and takes.id = student.id
+0;select distinct student.id,student.name from takes,student where takes.course_id='cs-101' and takes.id=student.id
+0;select distinct takes.id,student.name from student,takes where takes.id = student.id and takes.course_id = 'cs-101'
+0;select student.id,name from student,takes where student.id=takes.id and takes.course_id='cs-101'
+0;select distinct student.id,student.name from student,takes where takes.course_id='cs-101' and student.id=takes.id
+0;select distinct takes.id,name from takes,student where student.id=takes.id and course_id='cs-101'
+0;select distinct student.id,student.name from student,takes where takes.course_id='cs-101'
+0;select id,name from student natural join takes where course_id = 'cs-101'
+0;select student.id,student.name from student,takes where takes.id=student.id and takes.course_id='cs-101'
+0;select id from (student natural join takes) where course_id = 'cs-101'

@@ -1,8 +1,12 @@
 package toolsForMetrics;
 
+
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+
 import net.sf.jsqlparser.expression.AllComparisonExpression;
 import net.sf.jsqlparser.expression.AnyComparisonExpression;
 import net.sf.jsqlparser.expression.BinaryExpression;
@@ -132,8 +136,7 @@ public class ColumnExpressionVisitor implements ExpressionVisitor, ItemsListVisi
 
 	@Override 
 	public void visit(ExpressionList el) { 
-		for (@SuppressWarnings("unchecked")
-		Iterator<Expression> iter = el.getExpressions().iterator(); iter.hasNext();) { 
+		for (Iterator iter = el.getExpressions().iterator(); iter.hasNext();) { 
 			Expression expression = (Expression) iter.next(); 
 			expression.accept(this); 
 		} 
@@ -242,7 +245,6 @@ public class ColumnExpressionVisitor implements ExpressionVisitor, ItemsListVisi
 			}
 		} else {
 			Union union = (Union)arg0.getSelectBody();
-			@SuppressWarnings("unchecked")
 			List<PlainSelect> select_list = union.getPlainSelects();
 			for (PlainSelect plainSelect : select_list) {
 				plainSelect.accept(visitor);
@@ -266,7 +268,6 @@ public class ColumnExpressionVisitor implements ExpressionVisitor, ItemsListVisi
 		if (exp2!=null)
 			exp2.accept(this);
 
-		@SuppressWarnings("unchecked")
 		List<WhenClause> exp3=arg0.getWhenClauses();
 		WhenClause  when;
 		if (exp3!=null){

@@ -1,42 +1,61 @@
-1;WITH t AS (SELECT DISTINCT id, course_id FROM takes NATURAL JOIN section) SELECT course.course_id, count(DISTINCT id) FROM course LEFT OUTER JOIN t ON (t.course_id = course.course_id) GROUP BY course.course_id
-1;SELECT course_id, CASE WHEN count(DISTINCT id) IS NOT NULL THEN count(DISTINCT id) WHEN count(DISTINCT id) IS NULL THEN 0 END AS number_of_students FROM takes GROUP BY course_id
-1;SELECT course_id, count(id) FROM (SELECT DISTINCT id, course_id FROM takes NATURAL JOIN course) a GROUP BY course_id
-1;SELECT course_id, count(id) FROM takes GROUP BY course_id
-1;SELECT course.course_id, (SELECT count(takes.course_id) FROM takes WHERE course.course_id = takes.course_id) AS num_students FROM course
-3;SELECT course.course_id, (SELECT count(DISTINCT takes.id) FROM takes WHERE course.course_id = takes.course_id) FROM course
-1;SELECT course_id, count(id) FROM course LEFT OUTER JOIN takes USING (course_id) GROUP BY course_id
-1;SELECT course_id, 0 FROM (SELECT DISTINCT course_id, 0 FROM course) a
-13;SELECT course_id, count(DISTINCT id) FROM takes GROUP BY course_id
-1;SELECT DISTINCT course_id, (SELECT count(a.id) FROM takes AS a WHERE a.course_id = b.course_id) FROM takes AS b
-1;SELECT course_id, count(DISTINCT id) FROM takes GROUP BY course_id UNION SELECT DISTINCT course_id, 0 FROM course WHERE course_id NOT IN (SELECT course_id FROM takes)
-4;SELECT course_id, count(DISTINCT id) FROM student NATURAL JOIN takes GROUP BY course_id
-1;WITH coursestaken AS (SELECT course_id, count(*) FROM (SELECT DISTINCT id, course_id FROM takes) a GROUP BY course_id) SELECT * FROM coursestaken UNION SELECT course.course_id, 0 FROM course WHERE course.course_id NOT IN (SELECT course_id FROM coursestaken)
-1;SELECT course_id, count(*) FROM (SELECT DISTINCT id, course_id FROM takes) a GROUP BY course_id
-1;WITH data AS (SELECT course.title, student.id FROM course, takes, student WHERE takes.id = student.id AND takes.course_id = course.course_id) SELECT DISTINCT data.id, (SELECT count(id) FROM data AS d WHERE d.title = data.title) AS students FROM data
-2;SELECT course_id, count(course_id) FROM takes GROUP BY course_id
-1;SELECT DISTINCT course_id, count(*) AS count FROM takes GROUP BY course_id
-1;SELECT course.course_id, (SELECT count(*) FROM takes WHERE course.course_id = takes.course_id AND takes.grade <> '') AS num_students FROM course
-1;SELECT * FROM (SELECT course_id, count(id) AS count FROM takes GROUP BY course_id) a
-1;SELECT DISTINCT course.course_id, (SELECT count(DISTINCT takes.id) FROM takes WHERE takes.course_id = course.course_id) AS count_val FROM course
-1;SELECT course_id, count(DISTINCT id) AS id FROM takes GROUP BY course_id UNION SELECT course_id, 0 AS id FROM course WHERE course_id NOT IN (SELECT course_id FROM takes)
-2;SELECT course_id, count(*) AS students FROM takes GROUP BY course_id
-1;WITH dis AS (SELECT DISTINCT takes.course_id, count(DISTINCT takes.id) FROM takes GROUP BY takes.course_id) SELECT course.course_id, 0 FROM course WHERE course.course_id NOT IN (SELECT course_id FROM dis) UNION SELECT * FROM dis
-1;SELECT course.course_id, count(DISTINCT id) FROM takes RIGHT OUTER JOIN course ON (takes.course_id = course.course_id) GROUP BY course.course_id
-1;WITH tab AS (SELECT course_id AS course_id FROM course NATURAL JOIN takes NATURAL JOIN student) SELECT DISTINCT course_id, count(*) FROM tab GROUP BY course_id UNION SELECT course.course_id, 0 FROM course, tab WHERE course.course_id NOT IN (SELECT course_id FROM tab)
-2;WITH selected AS (SELECT course_id, count(DISTINCT id) FROM takes GROUP BY (course_id)) SELECT * FROM selected
-1;SELECT course_id, count(*) FROM (SELECT DISTINCT course_id, takes.id FROM takes NATURAL JOIN section) a GROUP BY course_id
-1;SELECT course_id, count(course_id) FROM (SELECT DISTINCT course_id, id FROM takes) a GROUP BY course_id
-1;WITH taken_courses AS (SELECT course_id, count(*) FROM (SELECT DISTINCT id, course_id FROM takes) a GROUP BY course_id) SELECT * FROM taken_courses UNION SELECT DISTINCT course.course_id, 0 FROM course WHERE course.course_id NOT IN (SELECT course_id FROM taken_courses)
-2;SELECT course.course_id, count(DISTINCT id) FROM takes RIGHT OUTER JOIN course ON (course.course_id = takes.course_id) GROUP BY course.course_id
-1;SELECT DISTINCT course_id, count(id) FROM takes GROUP BY course_id
-1;SELECT course_id, no_student FROM (SELECT course_id, count(*) AS no_student FROM takes GROUP BY course_id) a
-1;WITH t AS (SELECT DISTINCT id, course_id FROM takes NATURAL JOIN section) SELECT course.course_id, count(*) FROM t RIGHT OUTER JOIN course ON (t.course_id = course.course_id) GROUP BY course.course_id
-1;SELECT course_id, count(course_id) FROM takes GROUP BY course_id UNION SELECT course_id, 0 AS zero FROM course
-1;SELECT course_id, count(DISTINCT id) FROM takes GROUP BY course_id UNION SELECT course_id, 0 AS credits FROM course WHERE course_id NOT IN (SELECT course_id FROM takes)
-1;SELECT DISTINCT course_id, count(id) AS total_students FROM (SELECT * FROM section NATURAL JOIN takes) t GROUP BY course_id UNION SELECT DISTINCT course.course_id, 0 AS total_students FROM course WHERE course.course_id NOT IN (SELECT DISTINCT section.course_id FROM section)
-2;SELECT course_id, count(course_id) FROM (SELECT DISTINCT id, course_id FROM takes) a GROUP BY course_id
-2;SELECT course_id, 0 FROM course AS except
-1;SELECT course_id, count(DISTINCT id) FROM takes GROUP BY course_id UNION SELECT DISTINCT course_id, 0 FROM course AS except
-1;SELECT course_id, count(id) FROM (SELECT DISTINCT course.course_id, id FROM takes RIGHT OUTER JOIN course ON (takes.course_id = course.course_id)) a GROUP BY course_id
-1;SELECT course_id, count(*) FROM (SELECT DISTINCT student.id AS id, takes.course_id AS course_id FROM student, takes WHERE takes.id = student.id) a GROUP BY course_id
-1;SELECT DISTINCT course.course_id, (SELECT count(DISTINCT takes.id) FROM takes, student WHERE takes.course_id = course.course_id AND takes.id = student.id) FROM course
+0;(select course_id,count( course_id) from takes group by course_id ) union (select course_id,0 zero from course ) ) except (select distinct course_id,0 zero from takes
+0;select course_id,count(*) from (select distinct id,course_id from takes) a group by course_id) union ((select course_id,0 from course) except (select distinct course_id,0 from takes)
+0;select course_id,count(*) from (select distinct course_id,takes.id from takes natural join section) a group by course_id) union (select course_id,0 from ((select course_id from course) except (select distinct course_id from (select distinct course_id,takes.id from takes natural join section) b) ) c
+0;select course_id,count(course_id) from (select distinct id,course_id from takes) a group by course_id) union (select course_id,0 from ((select course_id from course) except (select distinct course_id from takes)) b
+0;select takes.course_id,count (distinct takes.id) from takes group by takes.course_id) union ( (select course.course_id,0 from course) except (select course_id,0 from (select takes.course_id,count(distinct takes.id) from takes group by takes.course_id) a )
+0;select course.course_id,(select count(distinct id) from takes where course.course_id=takes.course_id) from course
+0;select course_id,count(*) from takes group by course_id) union ((select course_id,0 from course) except (select course_id,0 from takes)
+0;select course_id,count(distinct id) from takes group by course_id) union (select distinct course_id,0 from course except select distinct course_id,0 from takes
+0;select course_id,count(distinct id) from takes group by course_id) union (select course.course_id,0 from course where course.course_id not in (select course_id from takes)
+0;select distinct course_id,count(*) as count from takes group by course_id) union select course_id,0 as count from (select course_id from course except select distinct course_id from takes)
+0;select distinct course_id,count(id) from takes group by course_id) union (select course_id,0 from course) except (select distinct course_id,0 from takes
+0;select distinct course.course_id,(select count (distinct takes.id) from takes,student where takes.course_id=course.course_id and takes.id=student.id) from course
+0;select course.course_id,count(distinct id) from takes right outer join course on (takes.course_id = course.course_id) group by course.course_id
+0;select course.course_id,(select count(distinct takes.id) from takes where course.course_id=takes.course_id ) from course
+0;select course_id,count(id) from course left outer join takes using (course_id) group by course_id
+0;select course_id,count(distinct id) from takes group by course_id) union (select distinct course_id,0 from course where course_id not in (select course_id from takes)
+0;with dis as (select distinct takes.course_id,count(distinct takes.id) from takes group by takes.course_id) select course.course_id,0 from course where course.course_id not in (select course_id from dis) union select * from dis
+0;select course_id,0 from course except select course_id,0 from (select course.course_id,student.id from course,takes,student where course.course_id = takes.course_id and takes.id = student.id) a union select course_id,count(distinct id) from (select course.course_id,student.id from course,takes,student where course.course_id = takes.course_id and takes.id = student.id) a group by(course_id)
+0;with selected as (select course_id,count (distinct id) from takes group by (course_id)) select * from selected union (select course_id,0 from ((select course_id from course) except (select course_id from selected)) a)
+0;select course_id,count (*) from (select distinct student.id id,takes.course_id course_id from student,takes where takes.id = student.id) a group by course_id ) union (select course.course_id,0 from course) except (select course_id,0 from ( select course_id,count (*) from (select distinct student.id id,takes.course_id course_id from student,takes where takes.id = student.id) b group by course_id ) c
+0;select course.course_id,(select count(takes.course_id) from takes where course.course_id = takes.course_id) as num_students from course
+0;select course_id,count(distinct id) from takes group by (course_id)) union (select course_id,0 from ((select course_id from course) except (select distinct course_id from takes)) a
+0;select a.course_id,count ( distinct a.id ) as students_in_course from takes a group by a.course_id) union (select course_id,0 from ( (select course_id from course) except (select course_id from takes) ) b
+0;select course_id,count(distinct id) from student natural join takes group by course_id) union (select course_id,0 from (select course_id from course except select course_id from takes) a
+0;select course_id,count(distinct id) from student natural join takes group by course_id) union ( select course_id,0 from ((select course_id from course) except (select course_id from takes)) a
+0;select course.course_id,(select count(distinct takes.id) from takes where course.course_id=takes.course_id) from course
+0;select distinct course_id,count(id) as total_students from (select * from section natural join takes) t group by course_id union select distinct course.course_id,0 total_students from course where course.course_id not in (select distinct section.course_id from section )
+0;with t as (select distinct id,course_id from takes natural join section) select course.course_id,count(distinct id) from course left outer join t on (t.course_id = course.course_id) group by course.course_id
+0;with data as (select course.title,student.id from course,takes,student where takes.id = student.id and takes.course_id = course.course_id) select distinct data.id,(select count(id) from data d where d.title = data.title) students from data
+0;with t as (select distinct id,course_id from takes natural join section) select course.course_id,count(*) from t right outer join course on (t.course_id = course.course_id) group by course.course_id
+0;select course_id,count(course_id) from takes group by course_id) union ( (select course_id,0 zero from course ) except (select course_id,0 zero from takes)
+0;select takes.course_id,count (distinct takes.id) from takes group by takes.course_id ) union ((select course_id,0 from course) except (select course_id,0 from (select takes.course_id,count (distinct takes.id) from takes group by takes.course_id ) a)
+0;select course_id,count(distinct id) from takes group by course_id) union (select course_id,0 credits from course where course_id not in (select course_id from takes)
+0;with taken_courses as (select course_id,count(*) from (select distinct id,course_id from takes) a group by course_id) (select * from taken_courses) union (select distinct course.course_id,0 from course where course.course_id not in (select course_id from taken_courses))
+0;select course_id,count(id) from (select distinct course.course_id,id from takes right outer join course on (takes.course_id = course.course_id)) a group by course_id
+0;select course.course_id,count(distinct id) from takes right outer join course on(course.course_id = takes.course_id) group by course.course_id
+0;select course_id,count (course_id) from takes group by course_id) union (select course_id,0 from course where course_id not in (select course_id from takes)
+0;select course_id,count(distinct id) from takes group by course_id) union select course_id,0 from ( (select course_id from course) except (select course_id from takes) )
+0;select course.course_id,(select count(*) from takes where course.course_id = takes.course_id and takes.grade <> 'f') as num_students from course
+0;select course_id,count (id) from (select distinct id,course_id from takes natural join course) a group by course_id
+0;select course_id,count(distinct id) from takes group by course_id union select distinct course_id,0 from course except select distinct course_id,0 from takes
+0;select course_id,count(id) from takes group by course_id) union ((select course_id,0 as count from course) except (select course_id,0 as count from takes)
+0;with tab as (select course_id as course_id from course natural join takes natural join student) (select distinct course_id,count(*) from tab group by course_id) union (select course.course_id,0 from course,tab where course.course_id not in (select course_id from tab))
+0;select course_id,count(distinct id) id from takes group by course_id union select course_id,0 id from course where course_id not in (select course_id from takes)
+0;select * from (select course_id,count(id) count from takes group by course_id) a) union (select course_id,0 count from ((select course_id from course) except (select course_id from (select course_id,count(id) count from takes group by course_id) b)) c
+0;select course_id,count(course_id) from (select distinct id,course_id from takes) a group by course_id) union (select course_id,0 from ( (select course_id from course) except (select distinct course_id from takes)) b
+0;select course_id,count(distinct id) as no_of_students from takes group by course_id) union (select course_id,0 from course where course_id not in (select course_id from takes )
+0;select course_id,count(distinct id) as a from takes group by course_id) union (select course_id,0 from course where course_id not in (select course_id from takes))
+0;with coursestaken as( select course_id,count(*) from (select distinct id,course_id from takes) a group by course_id) (select * from coursestaken ) union (select course.course_id,0 from course where course.course_id not in(select course_id from coursestaken))
+0;select course_id,count(distinct id) from takes group by course_id union select course_id,0 credits from course where course_id not in (select course_id from takes)
+0;select course_id,count(course_id) from (select distinct course_id,id from takes) a group by course_id
+0;select course_id,no_student from (select course_id,count(*) no_student from takes group by course_id) a
+0;select distinct course.course_id,(select count(distinct takes.id) from takes where takes.course_id = course.course_id) count_val from course
+0;select course_id,0 count from course except select course_id,0 count from (select * from takes natural join section) a group by course_id union ( select course_id,count(distinct id) from (select * from takes natural join section) b group by course_id )
+0;select course_id,0 from (select distinct course_id,0 from course) a except select course_id,0 from (select course_id,0,count(distinct id) from (select course.course_id,takes.year,student.id,0 from course,takes,student where course.course_id=takes.course_id and takes.id=student.id) b group by course_id) c union (select course_id,count(distinct id) from (select course.course_id,takes.year,student.id from course,takes,student where course.course_id=takes.course_id and takes.id=student.id) d group by course_id)
+0;select course_id,count(distinct id) student_count from student natural join takes group by course_id) union ((select course_id,0 from course) except (select course_id,0 from takes)
+0;select course_id,count( *) students from takes group by course_id) union (select course_id,0 students from course where course_id not in (select course_id from takes)
+0;select course_id,case when count(distinct id) is not null then count(distinct id) when count(distinct id) is null then 0 end number_of_students from takes group by course_id) union (select course_id,0 number_of_students from course where course_id not in (select course_id from takes)
+0;select course_id,count(distinct id) from takes group by course_id) union select course_id,0 from ((select course_id from course) except (select course_id from takes))
+0;select distinct course_id,(select count(a.id) from takes a where a.course_id=b.course_id) from takes b) union ( (select distinct course_id,0 from course) except (select distinct course_id,0 from takes)
+0;select a.course_id,count( distinct a.id ) as students_in_course from takes a group by a.course_id) union (select course_id,0 from ( (select course_id from course) except (select course_id from takes) ) b

@@ -7,9 +7,9 @@ import net.sf.jsqlparser.expression.*;
 import net.sf.jsqlparser.schema.Table;
 
 /**
- * A column. It can have the table name it belongs to.
+ * A extended definition of a column. It can have the table name it belongs to.
  */
-public final class ExtendedColumn extends net.sf.jsqlparser.schema.Column implements Comparable<ExtendedColumn> {
+public final class ExtendedColumn extends net.sf.jsqlparser.schema.Column implements Comparable {
 
     private Table table;
     private String columnName;
@@ -95,7 +95,7 @@ public final class ExtendedColumn extends net.sf.jsqlparser.schema.Column implem
     	
     }
     
-    public static TreeSet<ExtendedColumn> intersect (Collection <? extends ExtendedColumn> set1, Collection <? extends ExtendedColumn> set2)
+    public static <ExtendedColumn> TreeSet<ExtendedColumn> intersect (Collection <? extends ExtendedColumn> set1, Collection <? extends ExtendedColumn> set2)
     {
     	TreeSet<ExtendedColumn> result = new TreeSet<ExtendedColumn> ();
     	TreeSet<ExtendedColumn> s1 = new TreeSet<ExtendedColumn>(set1);
@@ -110,12 +110,12 @@ public final class ExtendedColumn extends net.sf.jsqlparser.schema.Column implem
     }
 
 	@Override
-	public int compareTo(ExtendedColumn o) {
+	public int compareTo(Object o) {
 		if (this.equals(o)) {
 			return 0;
 		}
 		else {
-			return this.toString().compareTo(o.toString());
+			return this.toString().compareTo(((ExtendedColumn)o).toString());
 		}
 	}
 }

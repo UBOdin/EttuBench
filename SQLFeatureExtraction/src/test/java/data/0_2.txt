@@ -1,4 +1,0 @@
-54;SELECT course_id, title FROM course WHERE dept_name = ''
-1;SELECT DISTINCT course.course_id, course.title FROM course WHERE course.dept_name = ''
-1;SELECT * FROM course WHERE dept_name = ''
-1;SELECT course_id, title FROM department, course WHERE department.dept_name = course.dept_name AND department.dept_name = ''

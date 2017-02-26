@@ -1,64 +1,68 @@
-1;SELECT id, name FROM student LEFT OUTER JOIN takes WHERE course_id IS NULL AND semester = '' AND year = ''
-1;SELECT student.id, student.name FROM student WHERE NOT EXISTS (SELECT id FROM (SELECT id, course_id FROM student NATURAL JOIN takes WHERE semester = '' AND year = '') did WHERE did.id = student.id)
-1;WITH spring2010 AS (SELECT * FROM student NATURAL JOIN takes WHERE semester = '' AND year = 2010) SELECT id, name FROM student LEFT OUTER JOIN spring2010 WHERE course_id IS NULL
-1;SELECT st.id, st.name FROM student AS st WHERE NOT EXISTS (SELECT * FROM (SELECT DISTINCT name, id FROM student NATURAL JOIN takes WHERE semester = '' AND year = 2010) tk WHERE tk.id = st.id)
-3;SELECT id, name FROM student LEFT OUTER JOIN (SELECT * FROM takes WHERE semester = '' AND year = '') a WHERE course_id IS NULL
-1;WITH a AS (SELECT * FROM takes WHERE semester = '' AND year = '') SELECT id, name FROM student LEFT OUTER JOIN a WHERE course_id IS NULL
-1;SELECT id, name FROM student LEFT OUTER JOIN (SELECT id, name, course_id FROM student LEFT OUTER JOIN takes WHERE year = 2010 AND semester = '') a WHERE course_id IS NULL
-3;SELECT id, name FROM student LEFT OUTER JOIN (SELECT * FROM takes WHERE semester = '' AND year = 2010) a WHERE course_id IS NULL
-1;WITH t21 AS (SELECT id, course_id FROM takes WHERE semester = '' AND year = '') SELECT id, name FROM student LEFT OUTER JOIN t21 WHERE course_id IS NULL
-1;SELECT id, name FROM student LEFT OUTER JOIN (SELECT id, name, course_id FROM student NATURAL JOIN takes WHERE semester = '' AND year = 2010) a WHERE course_id IS NULL
-1;SELECT id, name FROM student LEFT OUTER JOIN (SELECT id, '' AS count FROM takes WHERE semester = '' AND year = '') a WHERE count IS NULL
-1;SELECT id, name FROM (SELECT * FROM takes WHERE semester = '' AND year = '') a NATURAL JOIN student WHERE course_id IS NULL
-1;WITH new_tab AS (SELECT student.id AS id, student.name AS name, course_id AS course_id FROM student LEFT OUTER JOIN takes ON student.id = takes.id AND semester = '' AND year = 2010) SELECT id, name FROM new_tab WHERE course_id IS NULL
-1;SELECT DISTINCT id, name FROM student LEFT OUTER JOIN (SELECT id, course_id FROM takes WHERE semester = '' AND year = '') a WHERE course_id IS NULL
-1;WITH takes2 AS (SELECT * FROM takes WHERE semester = '' AND year = 2010) SELECT id, name FROM student LEFT OUTER JOIN takes2 WHERE course_id IS NULL
-1;SELECT id, name FROM (SELECT student.id, student.name, takes.course_id AS course FROM student LEFT OUTER JOIN takes ON takes.semester = '' AND takes.id = student.id AND takes.year = '') a WHERE course IS NULL
-1;WITH a AS (SELECT DISTINCT id, course_id FROM takes WHERE semester = '' AND year = 2010), b AS (SELECT DISTINCT id, name, course_id FROM student LEFT OUTER JOIN a) SELECT id, name FROM b WHERE course_id IS NULL
-1;SELECT student.id, name FROM student LEFT OUTER JOIN (SELECT * FROM takes WHERE takes.semester = '' AND takes.year = '') takes ON (student.id = takes.id) WHERE course_id IS NULL
-1;SELECT id, name, course_id, semester, year FROM student LEFT OUTER JOIN (SELECT * FROM takes WHERE (semester = '' AND year = 2010)) a WHERE course_id IS NULL
-1;SELECT student.id, student.name FROM student LEFT OUTER JOIN (SELECT * FROM takes WHERE takes.year = 2010 AND takes.semester = '') k ON student.id = k.id WHERE k.year IS NULL
-2;WITH mytable AS (SELECT id, course_id FROM takes WHERE semester = '' AND year = 2010) SELECT id, name FROM (SELECT id, name FROM student) a LEFT OUTER JOIN mytable WHERE course_id IS NULL
-1;SELECT id, name FROM student LEFT OUTER JOIN (SELECT id, course_id FROM takes WHERE semester = '' AND year = '') a WHERE course_id IS NULL
-1;SELECT id, name FROM (SELECT * FROM (SELECT id, name FROM student) a LEFT OUTER JOIN (SELECT id, course_id FROM takes WHERE semester = '' AND year = '') b) c WHERE course_id IS NULL
-1;WITH allstudents AS (SELECT student.id, student.name, takes.year FROM student LEFT OUTER JOIN takes ON (takes.year = 2010 AND takes.semester = '' AND student.id = takes.id)) SELECT id, name FROM allstudents WHERE year IS NULL
-1;WITH mytable AS (SELECT * FROM takes WHERE semester = '' AND year = '') SELECT DISTINCT id, name FROM student LEFT OUTER JOIN mytable WHERE course_id IS NULL
-1;SELECT DISTINCT t.id, t.name FROM (SELECT * FROM takes NATURAL JOIN student) t WHERE NOT EXISTS (SELECT * FROM takes AS s WHERE t.id = s.id AND semester = '' AND year = 2010)
-1;SELECT id, name FROM (SELECT student.id, student.name, t.course_id FROM student LEFT OUTER JOIN (SELECT id, course_id FROM takes WHERE takes.semester = '' AND takes.year = '') t ON student.id = t.id) a WHERE course_id IS NULL
-1;SELECT id, name FROM (SELECT name, id, course_id FROM (SELECT id, course_id FROM takes WHERE semester = '' AND year = '') a RIGHT OUTER JOIN student AS b) c WHERE course_id IS NULL
-1;SELECT id, name FROM (SELECT student.id, name, course_id FROM student LEFT OUTER JOIN (SELECT * FROM takes WHERE semester = '' AND year = '') t ON student.id = t.id) a WHERE course_id IS NULL
-2;WITH t AS (SELECT id, course_id FROM takes WHERE semester = '' AND year = '') SELECT id, name FROM student LEFT OUTER JOIN t WHERE course_id IS NULL
-1;WITH temp AS (SELECT id, name, year, semester FROM student NATURAL JOIN takes WHERE year = 2010 AND semester = '') SELECT id, name FROM temp LEFT OUTER JOIN takes WHERE course_id IS NULL
-1;SELECT * FROM student LEFT OUTER JOIN (SELECT id, course_id, semester, year FROM takes WHERE semester = '' AND year = '') a WHERE course_id IS NULL
-1;WITH takes_spr2010 AS (SELECT * FROM takes WHERE semester = '' AND year = '') SELECT student.id, student.name FROM student LEFT OUTER JOIN takes_spr2010 ON student.id = takes_spr2010.id AND course_id IS NULL
-1;SELECT id, name FROM (SELECT student.id, student.name, takes.course_id FROM student LEFT OUTER JOIN takes ON student.id = takes.id AND takes.semester = '' AND takes.year = 2010) a WHERE course_id IS NULL
-1;SELECT id, student.name FROM student LEFT OUTER JOIN (SELECT id, takes.course_id FROM student LEFT OUTER JOIN takes WHERE semester = '' AND year = '') a WHERE course_id IS NULL
-1;SELECT t.id, t.name FROM (SELECT * FROM student LEFT OUTER JOIN (SELECT * FROM takes WHERE takes.semester = '' AND takes.year = '') a) t WHERE t.course_id IS NULL
-1;WITH t1 AS (SELECT * FROM takes WHERE semester = '' AND year = 2010) SELECT id, name FROM student LEFT OUTER JOIN t1 WHERE t1.course_id IS NULL
-1;SELECT id, name FROM student LEFT OUTER JOIN (SELECT id, name, course_id FROM student NATURAL JOIN takes WHERE semester = '' AND year = 2010) a WHERE course_id IS NULL
-1;WITH a AS (SELECT * FROM takes WHERE semester = '' AND year = '') SELECT id, name FROM student LEFT JOIN a WHERE course_id IS NULL
-1;WITH a AS (SELECT * FROM student NATURAL JOIN (SELECT * FROM takes WHERE takes.semester = '' AND takes.year = 2010) a) SELECT a.id, a.name FROM a WHERE course_id IS NULL
-1;SELECT DISTINCT id, name, course_id, semester, year FROM student LEFT OUTER JOIN (SELECT * FROM takes WHERE semester = '' AND year = 2010) a WHERE course_id IS NULL OR semester IS NULL OR year IS NULL
-1;WITH sem AS (SELECT * FROM takes WHERE semester = '' AND year = '') SELECT id, name FROM student LEFT OUTER JOIN sem WHERE course_id IS NULL
-1;SELECT DISTINCT id, name FROM student LEFT OUTER JOIN (SELECT * FROM takes WHERE year = '' AND semester = '') a WHERE course_id IS NULL
-1;WITH tab1 AS (SELECT id, 1 AS status FROM takes WHERE year = 2010 AND semester = '') SELECT DISTINCT id, name FROM student LEFT OUTER JOIN tab1 WHERE status IS NULL
-1;WITH a AS (SELECT id, semester, year FROM takes WHERE semester = '' AND year = '') SELECT student.id, student.name FROM student LEFT OUTER JOIN a ON student.id = a.id WHERE a.semester IS NULL AND a.year IS NULL
-1;WITH a AS (SELECT * FROM takes WHERE semester = '' AND year = '') SELECT student.id, student.name FROM student LEFT OUTER JOIN a ON (student.id = a.id) WHERE course_id IS NULL
-1;SELECT DISTINCT student.id, name FROM student LEFT OUTER JOIN takes ON student.id = takes.id AND semester = '' AND year = 2010 WHERE course_id IS NULL OR year IS NULL
-1;SELECT id, name FROM (SELECT student.id, name, course_id FROM student LEFT OUTER JOIN takes ON (student.id = takes.id) AND (takes.semester = '') AND (takes.year = '')) g WHERE g.course_id IS NULL
-1;SELECT arbit.id, arbit.name FROM (SELECT id, name FROM student) arbit LEFT OUTER JOIN (SELECT id, course_id FROM takes WHERE takes.year = 2010 AND takes.semester = '') arbit1 ON (arbit.id = arbit1.id) WHERE arbit1.course_id IS NULL
-1;SELECT DISTINCT id FROM student LEFT OUTER JOIN (SELECT DISTINCT id, 1 AS test FROM takes WHERE year = '' AND semester = '') a WHERE test IS NULL
-1;SELECT id, name FROM (SELECT student.id, student.name, takes.course_id FROM student LEFT OUTER JOIN takes ON student.id = takes.id AND takes.semester = '' AND takes.year = '') a WHERE course_id IS NULL
-1;SELECT DISTINCT id, name FROM student LEFT OUTER JOIN (SELECT * FROM takes WHERE semester = '' AND year = 2010) a WHERE course_id IS NULL
-1;SELECT DISTINCT id, name FROM student LEFT OUTER JOIN (SELECT * FROM takes WHERE year = 2010 AND semester = '') a WHERE course_id IS NULL
-1;SELECT id, name FROM student LEFT OUTER JOIN (SELECT * FROM takes WHERE year = '' AND semester = '') a WHERE course_id IS NULL
-1;SELECT id, name FROM (SELECT id, name FROM student) a LEFT OUTER JOIN (SELECT id, course_id FROM takes WHERE takes.semester = '' AND takes.year = 2010) b WHERE course_id IS NULL
-1;WITH tab AS (SELECT * FROM takes WHERE takes.year = '' AND takes.semester = '') SELECT student.id, name FROM student LEFT OUTER JOIN tab ON (student.id = tab.id) WHERE course_id IS NULL
-1;SELECT id, name FROM (SELECT id, name FROM student) a LEFT OUTER JOIN (SELECT DISTINCT id, course_id FROM takes WHERE semester = '' AND year = '') b WHERE course_id IS NULL
-1;SELECT DISTINCT id, name FROM student LEFT OUTER JOIN (SELECT DISTINCT id, name, course_id FROM student NATURAL JOIN takes WHERE semester = '' AND year = 2010) a WHERE course_id IS NULL
-1;SELECT DISTINCT student.id, student.name FROM student LEFT OUTER JOIN (SELECT DISTINCT id, name, course_id FROM student NATURAL JOIN takes WHERE semester = '' AND year = '') t ON student.id = t.id WHERE course_id IS NULL
-1;SELECT id, name, course_id FROM student LEFT OUTER JOIN takes WHERE course_id IS NULL AND semester = '' AND year = 2010
-1;SELECT id, name, course_id FROM student LEFT OUTER JOIN takes WHERE semester = '' AND year = 2010 AND course_id = NULL
-1;WITH s AS (SELECT DISTINCT id, name, course_id FROM takes NATURAL JOIN student WHERE semester = '' AND year = '') SELECT id, name FROM student LEFT OUTER JOIN s WHERE course_id IS NULL
-1;SELECT DISTINCT t.id, t.name FROM (SELECT * FROM takes NATURAL JOIN student) t WHERE NOT EXISTS (SELECT * FROM takes WHERE t.id = takes.id AND semester = '' AND year = 2010)
-1;WITH joi AS (SELECT id, name, course_id FROM student NATURAL JOIN takes WHERE semester = '' AND year = '') SELECT id, name FROM student LEFT OUTER JOIN joi WHERE course_id IS NULL
+0;with new_tab as (select student.id as id,student.name as name,course_id as course_id from student left outer join takes on student.id = takes.id and semester = 'spring' and year = 2010) select id,name from new_tab where course_id is null
+0;select id,name from (select student.id,name,course_id from student left outer join takes on (student.id = takes.id) and (takes.semester = 'spring') and (takes.year = '2010')) g where g.course_id is null
+0;select id,name from (select student.id,student.name,takes.course_id from student left outer join takes on student.id = takes.id and takes.semester = 'spring' and takes.year = '2010') a where course_id is null
+0;select id,name from student left outer join (select * from takes where semester='spring' and year=2010) a where course_id is null
+0;select student.id,student.name from student where not exists (select id from (select id,course_id from student natural join takes where semester='spring' and year='2010') did where did.id=student.id)
+0;select id,name from (select id,name from student) a left outer join (select distinct id,course_id from takes where semester = 'spring' and year = '2010') b where course_id is null
+0;with takes_spr2010 as (select * from takes where semester = 'spring' and year = '2010') select student.id,student.name from student left outer join takes_spr2010 on student.id = takes_spr2010.id and course_id is null
+0;select id,name from student left outer join takes where course_id is null and semester='spring' and year='2010'
+0;select distinct id,name from student left outer join (select id,course_id from takes where semester='spring' and year = '2010') a where course_id is null
+0;with allstudents as(select student.id,student.name,takes.year from student left outer join takes on (takes.year=2010 and takes.semester='spring' and student.id=takes.id )) select id,name from allstudents where year is null
+0;select distinct id,name from student left outer join (select distinct id,name,course_id from student natural join takes where semester = 'spring' and year = 2010) a where course_id is null
+0;select id,name from student left outer join (select * from takes where semester = 'spring' and year = 2010 ) a where course_id is null
+0;select id,name from (select student.id,student.name,t.course_id from student left outer join (select id,course_id from takes where takes.semester = 'spring' and takes.year = '2010') t on student.id = t.id) a where course_id is null
+0;select id,name from (select student.id,name,course_id from student left outer join (select * from takes where semester='spring' and year='2010') t on student.id=t.id) a where course_id is null
+0;select distinct student.id,name from student left outer join takes on student.id = takes.id and semester = 'spring' and year = 2010 where course_id is null or year is null
+0;with t as (select id,course_id from takes where semester = 'spring' and year =2010) select id,name from student left outer join t where course_id is null
+0;select id,name from student left outer join (select * from takes where semester = 'spring' and year = '2010') a where course_id is null
+0;select t.id,t.name from (select * from student left outer join(select * from takes where takes.semester='spring' and takes.year='2010') a) t where t.course_id is null
+0;select id,name from student left outer join (select * from takes where semester='spring' and year='2010') a where course_id is null
+0;select id,name,course_id,semester,year from student left outer join (select * from takes where (semester='spring' and year=2010)) a where course_id is null
+0;with a as (select * from takes where semester ='spring' and year ='2010') select id,name from student left join a where course_id is null
+0;select distinct student.id,student.name from student left outer join (select distinct id,name,course_id from (student natural join takes) where semester = 'spring' and year = '2010') t on student.id = t.id where course_id is null
+0;with joi as (select id,name,course_id from student natural join takes where semester = 'spring' and year = '2010') select id,name from student left outer join joi where course_id is null
+0;with spring2010 as (select * from student natural join takes where semester='spring' and year=2010) select id,name from student left outer join spring2010 where course_id is null
+0;select id,name from ((select * from takes where semester = 'spring' and year = '2010') a natural join student) where course_id is null
+0;select id,name from(select student.id,student.name, takes.course_id as course from student left outer join takes on takes.semester = 'spring' and takes.id = student.id and takes.year = '2010') a where course is null
+0;select id,name from (select student.id,student.name,takes.course_id from student left outer join takes on student.id=takes.id and takes.semester='spring' and takes.year=2010) a where course_id is null
+0;with t as (select id,course_id from takes where semester = 'spring' and year = '2010') select id,name from student left outer join t where course_id is null
+0;with sem as (select * from takes where semester='spring' and year='2010') select id,name from student left outer join sem where course_id is null
+0;with s as (select distinct id,name,course_id from takes natural join student where semester = 'spring' and year = '2010') select id,name from student left outer join s where course_id is null
+0;select id,name from (select * from (select id,name from student) a left outer join (select id,course_id from takes where semester='spring' and year='2010') b) c where course_id is null
+0;select distinct id,name from (student left outer join(select * from takes where semester = 'spring' and year = 2010) a) where course_id is null
+0;select id,name from ( select name,id,course_id from ( (select id,course_id from takes where semester = 'spring' and year='2010') a right outer join student) b) c where course_id is null
+0;select distinct t.id,t.name from (select * from takes natural join student) t where not exists (select * from takes where t.id=takes.id and semester='spring' and year=2010)
+0;with a as (select distinct id,course_id from takes where semester = 'spring' and year = 2010),b as (select distinct id,name,course_id from student left outer join a) select id,name from b where course_id is null
+0;select id,name from student left outer join (select id,name,course_id from student left outer join takes where year = 2010 and semester = 'spring') a where course_id is null
+0;with mytable as (select * from takes where semester = 'spring' and year = '2010') select distinct id,name from student left outer join mytable where course_id is null
+0;select * from student left outer join (select id,course_id,semester,year from takes where semester = 'spring' and year = '2010') a where course_id is null
+0;select id,name from student left outer join (select id,name,course_id from (student natural join takes) where semester = 'spring' and year = 2010) a where course_id is null
+0;select student.id,student.name from student left outer join (select * from takes where takes.year = 2010 and takes.semester = 'spring') k on student.id = k.id where k.year is null
+0;select distinct id,name from student left outer join (select * from takes where year = '2010' and semester = 'spring' ) a where course_id is null
+0;with a as (select id,semester,year from takes where semester = 'spring' and year = '2010') select student.id,student.name from student left outer join a on student.id = a.id where a.semester is null and a.year is null
+0;select id,name,course_id from student left outer join takes where semester='spring' and year=2010 and course_id=null
+0;select distinct id from student left outer join (select distinct id,1 as test from takes where year='2010' and semester='spring') a where test is null
+0;with mytable as ( select id,course_id from takes where semester = 'spring' and year = 2010 ) select id,name from ( select id,name from student ) a left outer join mytable where course_id is null
+0;select id,name from student left outer join (select id,course_id from takes where semester = 'spring' and year = '2010') a where course_id is null
+0;select distinct t.id,t.name from (select * from takes natural join student) t where not exists (select * from takes s where t.id=s.id and semester='spring' and year=2010)
+0;select id,name from ( (select id,name from student) a left outer join (select id,course_id from takes where takes.semester='spring' and takes.year = 2010) b) where course_id is null
+0;select st.id,st.name from student st where not exists (select * from (select distinct name,id from student natural join takes where semester='spring' and year = 2010 ) tk where tk.id = st.id)
+0;select id,student.name from student left outer join (select id,takes.course_id from student left outer join takes where semester='spring' and year='2010') a where course_id is null
+0;select student.id,name from student left outer join (select * from takes where takes.semester = 'spring' and takes.year = '2010') takes on (student.id = takes.id) where course_id is null
+0;with takes2 as (select * from takes where semester = 'spring' and year = 2010) select id,name from student left outer join takes2 where course_id is null
+0;with mytable as (select id,course_id from takes where semester='spring' and year=2010) select id,name from (select id,name from student) a left outer join mytable where course_id is null
+0;with tab1 as (select id,1 as status from takes where year=2010 and semester='spring') select distinct id,name from student left outer join tab1 where status is null
+0;select arbit.id,arbit.name from (select id,name from student) arbit left outer join (select id,course_id from takes where takes.year = 2010 and takes.semester = 'spring') arbit1 on (arbit.id= arbit1.id) where arbit1.course_id is null
+0;with temp as (select id,name,year,semester from student natural join takes where year = 2010 and semester = 'spring') select id,name from temp left outer join takes where course_id is null
+0;select id,name from student left outer join ( select id,'took' as count from takes where semester='spring' and year='2010' ) a where count is null
+0;with a as (select * from student natural join (select * from takes where takes.semester='spring' and takes.year=2010 ) a) select a.id,a.name from a where course_id is null
+0;select id,name from student left outer join (select id,name,course_id from student natural join takes where semester = 'spring' and year = 2010) a where course_id is null
+0;with t21 as (select id,course_id from takes where semester='spring' and year='2010') select id,name from student left outer join t21 where course_id is null
+0;with t1 as (select * from takes where semester='spring' and year=2010) select id,name from student left outer join t1 where t1.course_id is null
+0;with tab as (select * from takes where takes.year = '2010' and takes.semester = 'spring') select student.id,name from (student left outer join tab on (student.id = tab.id)) where course_id is null
+0;select distinct id,name from student left outer join (select * from takes where year = 2010 and semester = 'spring') a where course_id is null
+0;select id,name from (student left outer join (select * from takes where year='2010' and semester='spring') a) where course_id is null
+0;select id,name,course_id from (student left outer join takes ) where course_id is null and semester='spring' and year=2010
+0;select distinct id,name,course_id,semester,year from student left outer join (select * from takes where semester = 'spring' and year = 2010) a where course_id is null or semester is null or year is null
+0;with a as (select * from takes where semester = 'spring' and year = '2010') select id,name from student left outer join a where course_id is null
+0;with a as ( select * from takes where semester = 'spring' and year = '2010' ) select student.id,student.name from student left outer join a on ( student.id = a.id ) where course_id is null

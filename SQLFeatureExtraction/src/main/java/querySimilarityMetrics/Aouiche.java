@@ -1,5 +1,6 @@
 package querySimilarityMetrics;
 
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -21,8 +22,14 @@ import net.sf.jsqlparser.statement.select.WithItem;
 import toolsForMetrics.ExtendedColumn;
 import toolsForMetrics.Global;
 import toolsForMetrics.Schema;
+import toolsForMetrics.SelectItemListParser;
 import toolsForMetrics.Util;
 
+/**
+ * Query similarity metric Aouiche
+ * @author tingxie
+ *
+ */
 public class Aouiche {
 	
 	private static TreeSet<ExtendedColumn> columnList1 = new TreeSet<ExtendedColumn>();
@@ -34,7 +41,6 @@ public class Aouiche {
 		if (stmt1 instanceof Select) {
 			Select s1=(Select) stmt1;
 			
-			@SuppressWarnings("unchecked")
 			List<WithItem> with1 = s1.getWithItemsList();
 			if (with1 != null) {
 				for (int i = 0; i < with1.size(); i++) {
@@ -131,7 +137,6 @@ public class Aouiche {
 			
 			Select s1=(Select) stmt1;
 			
-			@SuppressWarnings("unchecked")
 			List<WithItem> with1 = s1.getWithItemsList();
 			if (with1 != null) {
 				for (int i = 0; i < with1.size(); i++) {
@@ -141,7 +146,6 @@ public class Aouiche {
 			
 			Select s2=(Select) stmt2;
 			
-			@SuppressWarnings("unchecked")
 			List<WithItem> with2 = s2.getWithItemsList();
 			if (with2 != null) {
 				for (int i = 0; i < with2.size(); i++) {
@@ -197,7 +201,6 @@ public class Aouiche {
 		else if(body instanceof Union){
 			//System.out.println("currently Union does not handle Distinct!");
 			Union u=(Union)body;
-			@SuppressWarnings("unchecked")
 			List<PlainSelect> list= u.getPlainSelects();
 			//executePlainSelect(list.get(0));
 			for (int i = 0; i < list.size(); i++) {
@@ -241,6 +244,8 @@ public class Aouiche {
 					
 					//System.out.println(sss);
 					if (sss != null) {
+						// pop out the top iter
+						SelectItemListParser.correct(sss, tables);
 						//breaking selection operators with AND
 						List<Expression> selects = Util.processSelect(sss);
 
@@ -283,6 +288,8 @@ public class Aouiche {
 		// 2.check where condition and do selection
 		Expression where = s.getWhere();
 		if (where != null) {
+			// pop out the top iter
+			SelectItemListParser.correct(where, tables);
 			//breaking selection operators with AND
 			List<Expression> selects = Util.processSelect(where);
 
@@ -299,6 +306,7 @@ public class Aouiche {
 		if (groupbyRef != null) {
 			// pop out the top iter
 			for (int i = 0; i < groupbyRef.size(); i++) {
+				SelectItemListParser.correct(groupbyRef.get(i), tables);
 				//breaking selection operators with AND
 				List<Expression> columns = Util.processSelect(groupbyRef.get(i));
 				for (int j = 0; j < columns.size(); j++) {
@@ -313,6 +321,8 @@ public class Aouiche {
 		// 4. check Having clause
 		Expression having = s.getHaving();
 		if (having != null) {
+			// pop out the top iter
+			SelectItemListParser.correct(having, tables);
 			//breaking selection operators with AND
 			List<Expression> selects = Util.processSelect(having);
 

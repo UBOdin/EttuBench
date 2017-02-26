@@ -1,51 +1,64 @@
-5;SELECT course_id, title FROM course NATURAL JOIN section WHERE semester = '' AND year = 2010
-2;SELECT course_id, title FROM section NATURAL JOIN course WHERE semester = '' AND year = 2010 AND course_id NOT IN (SELECT course_id FROM prereq)
-1;SELECT course_id, title FROM course NATURAL JOIN teaches WHERE semester = '' AND year = 2010
-1;SELECT course_id, title FROM course NATURAL JOIN section WHERE year = 2010 AND semester = '' AND course_id NOT IN (SELECT course_id FROM prereq)
-1;SELECT course.course_id, course.title FROM section, course WHERE section.course_id = course.course_id AND section.semester = '' AND section.year = 2010
-1;SELECT DISTINCT course_id FROM section WHERE semester = '' AND year = ''
-2;SELECT DISTINCT course_id, course.title FROM course NATURAL JOIN section WHERE section.semester = '' AND section.year = 2010
-2;SELECT course_id, title FROM course AS except
-1;SELECT DISTINCT section.course_id, course.title FROM section, course WHERE course.course_id = section.course_id AND semester = '' AND year = '' AND course.course_id NOT IN (SELECT course_id FROM prereq)
-2;SELECT section.course_id, course.title FROM section, course WHERE section.course_id = course.course_id AND section.semester = '' AND section.year = 2010
-1;SELECT course.course_id, course.title FROM course, section, prereq WHERE course.course_id = course.title AND section.semester = '' AND section.year = '' AND course.course_id NOT IN (SELECT course_id FROM prereq)
-3;SELECT course.course_id, title FROM course, section WHERE course.course_id = section.course_id AND semester = '' AND year = 2010
-1;SELECT course_id, title FROM course NATURAL JOIN section WHERE year = 2010 AND semester = ''
-1;SELECT course_id, title FROM course JOIN teaches USING (course_id) WHERE semester = '' AND year = '' AND course_id NOT IN (SELECT course_id FROM prereq)
-3;SELECT course_id, title FROM course NATURAL JOIN section WHERE semester = '' AND year = '' AND course_id NOT IN (SELECT course_id FROM prereq)
-1;SELECT DISTINCT course_id, title FROM course NATURAL JOIN section WHERE year = '' AND semester = '' AND course_id NOT IN (SELECT course_id FROM prereq)
-2;SELECT course.course_id, course.title FROM course, takes WHERE course.course_id = takes.course_id AND takes.year = 2010 AND takes.semester = ''
-1;SELECT DISTINCT course_id, title FROM section NATURAL JOIN course WHERE semester = '' AND year = 2010 AND course_id NOT IN (SELECT DISTINCT course_id FROM prereq)
-2;SELECT course.course_id, course.title FROM section, course WHERE section.course_id = course.course_id AND section.year = '' AND section.semester = ''
-2;SELECT course.course_id, course.title FROM course, section WHERE course.course_id = section.course_id AND section.year = '' AND semester = ''
-1;SELECT section.course_id, course.title FROM section, course, prereq WHERE section.semester = '' AND section.course_id = course.course_id AND section.year = 2010
-1;WITH a AS (SELECT course_id AS course_id, title AS title FROM course WHERE course.course_id NOT IN (SELECT DISTINCT course_id FROM prereq)) SELECT a.course_id, a.title FROM section, a WHERE a.course_id = section.course_id AND year = '' AND semester = ''
-1;SELECT course.course_id, course.title FROM takes, course WHERE takes.course_id = course.course_id AND takes.semester = '' AND takes.year = ''
-1;SELECT course.course_id, course.title FROM teaches, course WHERE teaches.course_id = course.course_id AND teaches.year = 2010 AND teaches.semester = '' AND NOT EXISTS (SELECT * FROM prereq WHERE prereq.course_id = course.course_id)
-1;SELECT course.course_id, course.title FROM course, section, prereq WHERE section.year = 2010 AND section.semester = '' AND section.course_id = course.course_id
-1;SELECT DISTINCT course_id, title FROM teaches NATURAL JOIN course WHERE semester = '' AND year = ''
-2;SELECT course_id FROM course AS except
-1;SELECT course.course_id, course.title FROM section, course WHERE section.course_id = course.course_id AND section.semester = '' AND section.year = '' AND section.course_id NOT IN (SELECT prereq.course_id FROM prereq, course, section WHERE course.course_id = prereq.course_id AND section.course_id = course.course_id AND section.semester = '' AND year = '')
-1;SELECT course.course_id, course.title FROM course, teaches WHERE teaches.semester = '' AND teaches.year = '' AND teaches.course_id = course.course_id
-2;SELECT course_id, title FROM course NATURAL JOIN section WHERE year = '' AND semester = ''
-1;SELECT course.course_id FROM course JOIN section ON course.course_id = section.course_id WHERE section.semester = '' AND section.year = 2010
-1;SELECT * FROM (SELECT DISTINCT course_id FROM teaches WHERE year = 2010) arbit1 JOIN (SELECT DISTINCT course_id FROM prereq) arbit2 ON arbit1.course_id = arbit2.course_id
-1;SELECT DISTINCT course_id, title FROM course NATURAL JOIN section WHERE semester = '' AND year = 2010 AND course_id NOT IN (SELECT course_id FROM prereq)
-1;SELECT DISTINCT course.course_id, course.title FROM course, section, prereq WHERE course.course_id = section.course_id AND section.semester = '' AND section.year = 2010 AND course.course_id NOT IN (SELECT prereq.course_id FROM prereq)
-1;SELECT DISTINCT course.course_id, course.title FROM course, section, prereq WHERE section.semester = '' AND section.year = '' AND course.course_id = section.course_id AND course.course_id NOT IN (SELECT course_id FROM prereq)
-1;SELECT course.course_id, title FROM course, section WHERE section.course_id = course.course_id AND year = '' AND semester = ''
-2;SELECT DISTINCT course.course_id, course.title FROM course, takes WHERE course.course_id = takes.course_id AND takes.semester = '' AND takes.year = ''
-2;SELECT course_id, title FROM course NATURAL JOIN takes WHERE semester = '' AND year = '' AND course_id NOT IN (SELECT course_id FROM prereq)
-1;SELECT DISTINCT section.course_id, course.title FROM course, section, prereq WHERE course.course_id = section.course_id AND section.course_id NOT IN (SELECT prereq.course_id FROM prereq) AND section.semester = '' AND section.year = 2010
-1;SELECT DISTINCT course.course_id, course.title FROM section, course WHERE section.semester = '' AND section.year = '' AND section.course_id = course.course_id
-1;SELECT course.course_id, course.title FROM course WHERE course.course_id NOT IN (SELECT course_id FROM prereq)
-1;SELECT course.course_id FROM course, section WHERE section.semester = '' AND section.year = '' AND course.course_id = section.course_id
-1;SELECT course.course_id, course.title FROM section, course, prereq WHERE section.semester = '' AND section.year = '' AND section.course_id = course.course_id
-1;SELECT course.course_id, title FROM course, section WHERE course.course_id NOT IN (SELECT course_id FROM prereq) AND course.course_id = section.course_id AND semester = '' AND year = 2010
-1;SELECT course_id FROM section NATURAL JOIN course WHERE semester = '' AND year = ''
-1;SELECT course.course_id, title FROM course, section WHERE section.semester = '' AND section.year = 2010 AND section.course_id = course.course_id
-1;SELECT DISTINCT section.course_id, course.title FROM section, course WHERE section.semester = '' AND section.year = '' AND section.course_id = course.course_id
-1;SELECT course.course_id, title FROM course, section WHERE course.course_id = section.course_id AND semester = '' AND year = ''
-1;SELECT course.course_id, course.title FROM section, course WHERE section.semester = '' AND section.year = '' AND section.course_id = course.course_id
-1;SELECT course.course_id, course.title FROM course, section WHERE section.semester = '' AND section.year = '' AND section.course_id = course.course_id
-1;SELECT DISTINCT course.course_id, title FROM course, prereq, section WHERE NOT (course.course_id = prereq.course_id) AND section.course_id = course.course_id AND section.semester = '' AND section.year = ''
+0;select distinct course_id,course.title from course natural join section where section.semester = 'spring' and section.year = 2010) except (select course_id,course.title from course natural join prereq
+0;select distinct course_id,title from course natural join section where semester='spring' and year=2010) intersect ((select course_id,title from course)except(select course.course_id,course.title from course,prereq where course.course_id=prereq.course_id)
+0;select course_id,title from course natural join section where year=2010 and semester='spring' and course_id not in (select course_id from prereq)
+0;select course.course_id,course.title from section,course where section.course_id = course.course_id and section.year = '2010' and section.semester = 'spring') except (select course.course_id,course.title from section,course,prereq where section.course_id = course.course_id and course.course_id = prereq.course_id and section.year = '2010' and section.semester = 'spring'
+0;select course_id,title from course natural join takes where semester= 'spring' and year = '2010' and course_id not in (select course_id from prereq)
+0;select distinct course_id,title from section natural join course where semester='spring' and year=2010 and course_id not in (select distinct course_id from prereq)
+0;select section.course_id,course.title from section,course where section.course_id=course.course_id and section.year=2010 and section.semester='spring') intersect ((select course.course_id,course.title from course) except (select course.course_id,course.title from course,prereq where course.course_id=prereq.course_id)
+0;select course.course_id,title from course,section where course.course_id=section.course_id and semester='spring' and year=2010) except (select course.course_id,title from course,prereq,section where course.course_id=prereq.course_id and course.course_id=section.course_id and semester='spring' and year=2010
+0;select course_id,title from course natural join section where semester = 'spring' and year = '2010' and course_id not in (select course_id from prereq)
+0;select course_id,title from course natural join section where semester = 'spring' and year = 2010) except (select course_id,title from prereq natural join course
+0;select course.course_id,course.title from course,section,prereq where section.year = 2010 and section.semester = 'spring' and section.course_id = course.course_id) except (select course_id,title from (select * from course natural join prereq) a
+0;select section.course_id,course.title from section,course where section.course_id = course.course_id and section.semester = 'spring' and section.year = 2010) except (select section.course_id,course.title from section,course,prereq where section.course_id = course.course_id and section.course_id = prereq.course_id and prereq.prereq_id is not null
+0;select course_id,title from course except select course_id,title from course natural join prereq
+0;select course_id,title from course natural join section where year=2010 and semester = 'spring') except (select course_id,title from course natural join prereq natural join section where year=2010 and semester = 'spring'
+0;select course_id,title from course natural join section where semester = 'spring' and year = 2010 except (select course_id,title from course natural join prereq)
+0;select course.course_id,title from course,section where section.course_id=course.course_id and year='2010' and semester='spring') except (select course.course_id,title from section,course,prereq where section.course_id=course.course_id and course.course_id = prereq.course_id and section.year='2010' and section.semester='spring'
+0;select course_id from course) except (select course_id from prereq
+0;select course.course_id,course.title from course) except (select course.course_id,course.title from course,prereq where course.course_id = prereq.course_id
+0;select course.course_id,title from course,section where section.semester='spring' and section.year=2010 and section.course_id=course.course_id) except (select course.course_id,title from course,prereq where course.course_id=prereq.course_id
+0;select course_id,title from course natural join section where semester='spring' and year='2010' and course_id not in (select course_id from prereq)
+0;select course.course_id,course.title from course,section where course.course_id = section.course_id and semester = 'spring' and year = 2010 except select course.course_id,course.title from course,prereq where course.course_id = prereq.course_id
+0;select course.course_id,course.title from course,takes where course.course_id = takes.course_id and takes.year = 2010 and takes.semester = 'spring') except (select distinct course.course_id,course.title from course,takes,prereq where course.course_id = prereq.course_id and course.course_id = takes.course_id and takes.year = 2010 and takes.semester = 'spring'
+0;select course_id,title from course natural join section where year='2010' and semester='spring') except (select course_id,title from course natural join section natural join prereq where year='2010' and semester='spring'
+0;select distinct section.course_id,course.title from course,section,prereq where course.course_id=section.course_id and section.course_id not in (select prereq.course_id from prereq) and section.semester='spring' and section.year=2010
+0;with a as (select course_id as course_id,title as title from course where course.course_id not in (select distinct course_id from prereq) ) select a.course_id,a.title from section,a where a.course_id = section.course_id and year = '2010' and semester = 'spring'
+0;select course.course_id,course.title from section,course where section.course_id = course.course_id and section.semester = 'spring' and section.year = '2010' and section.course_id not in (select prereq.course_id from prereq,course,section where course.course_id = prereq.course_id and section.course_id = course.course_id and section.semester = 'spring' and year = '2010')
+0;select course_id,title from section natural join course where semester = 'spring' and year = 2010 and course_id not in (select course_id from prereq)
+0;select distinct course.course_id,course.title from course,section,prereq where section.semester = 'spring' and section.year = '2010' and course.course_id = section.course_id and course.course_id not in (select course_id from prereq)
+0;select course.course_id,course.title from course where course.course_id not in (select course_id from prereq)
+0;select course_id from course except select course_id from course natural join prereq
+0;select distinct section.course_id,course.title from section,course where section.semester = 'spring' and section.year = '2010'and section.course_id = course.course_id except select prereq.course_id,course.title from prereq,course
+0;select distinct section.course_id,course.title from section,course where course.course_id=section.course_id and semester='spring' and year='2010' and course.course_id not in(select course_id from prereq)
+0;select distinct course.course_id,course.title from section,course where section.semester = 'spring' and section.year = '2010' and section.course_id = course.course_id except select distinct prereq.course_id,course.title from prereq,course
+0;select course.course_id,course.title from course,section where course.course_id=section.course_id and section.year='2010' and semester = 'spring') except (select prereq.course_id,course.title from prereq,course where prereq.course_id=course.course_id
+0;select distinct course.course_id,course.title from course,takes where course.course_id = takes.course_id and takes.semester='spring' and takes.year='2010') except (select distinct course.course_id,course.title from course,prereq where course.course_id=prereq.course_id
+0;select course.course_id,title from course,section where course.course_id not in (select course_id from prereq) and course.course_id = section.course_id and semester = 'spring' and year = 2010
+0;select course.course_id,course.title from section,course where section.semester = 'spring' and section.year = '2010' and section.course_id = course.course_id) except (select course.course_id,course.title from section,course,prereq where section.semester = 'spring' and section.year = '2010' and section.course_id = course.course_id and course.course_id = prereq.course_id
+0;select course.course_id,course.title from section,course,prereq where section.semester='spring' and section.year='2010' and section.course_id = course.course_id ) except (select course.course_id,course.title from section,course,prereq where section.semester='spring' and section.year='2010' and section.course_id = course.course_id and prereq.course_id=course.course_id
+0;select course.course_id,course.title from course,section,prereq where course.course_id= course.title and section.semester = 'spring' and section.year = '2010' and course.course_id not in (select course_id from prereq)
+0;select course.course_id,course.title from course,section where course.course_id=section.course_id and section.semester='spring' and section.year=2010) except (select course.course_id,course.title from course,section,prereq where course.course_id=section.course_id and section.semester='spring' and prereq.course_id= section.course_id and section.year=2010
+0;select course.course_id,course.title from section,course where section.course_id = course.course_id and section.semester='spring' and section.year = 2010) except (select course.course_id,course.title from section,course,prereq where section.course_id = course.course_id and section.course_id = prereq.course_id and section.semester='spring' and section.year = 2010
+0;select course.course_id,course.title from course,section where course.course_id = section.course_id and section.semester = 'spring' and section.year = '2010') except (select course.course_id,course.title from course,prereq where course.course_id = prereq.course_id
+0;select course.course_id,course.title from takes,course where takes.course_id = course.course_id and takes.semester = 'spring' and takes.year = '2010' except select course.course_id,course.title from prereq,course where prereq.course_id = course.course_id
+0;select * from (select distinct course_id from teaches where year=2010) arbit1 join (select distinct course_id from prereq) arbit2 on arbit1.course_id=arbit2.course_id
+0;select distinct course_id from section where semester='spring' and year='2010') except (select course_id from prereq
+0;select course.course_id from (course join section on course.course_id=section.course_id) where section.semester = 'spring' and section.year = 2010) except (select course_id from prereq
+0;select course_id,title from course natural join teaches where semester = 'spring' and year = 2010) except (select course_id,title from course natural join teaches natural join prereq where semester = 'spring' and year = 2010
+0;select distinct course_id,title from course natural join section where semester = 'spring' and year = 2010 and course_id not in (select course_id from prereq)
+0;select course.course_id from course,section where section.semester='spring' and section.year='2010' and course.course_id=section.course_id except select prereq.course_id from prereq
+0;select course_id from (section natural join course) where semester = 'spring' and year='2010') except (select course_id from prereq
+0;select distinct course.course_id,title from course,prereq,section where not(course.course_id=prereq.course_id) and section.course_id=course.course_id and section.semester='spring' and section.year='2010'
+0;select course_id,title from course join teaches using (course_id) where semester='spring' and year='2010' and course_id not in (select course_id from prereq)
+0;select course.course_id,title from course,section where course.course_id=section.course_id and semester='spring' and year='2010') except (select course.course_id,title from course,prereq where course.course_id=prereq.course_id
+0;select course.course_id,course.title from course,section where course.course_id=section.course_id and section.year='2010' and section.semester='spring' intersect (select course.course_id,course.title from course except (select course.course_id,course.title from prereq,course where prereq.course_id=course.course_id))
+0;select distinct course_id,title from (course natural join section) where year = '2010' and semester = 'spring' and course_id not in (select course_id from prereq)
+0;select course_id,title from course natural join section where semester='spring' and year=2010) except (select course_id,title from course natural join prereq
+0;select distinct course.course_id,course.title from course,section,prereq where course.course_id = section.course_id and section.semester = 'spring' and section.year = 2010 and course.course_id not in (select prereq.course_id from prereq)
+0;select section.course_id,course.title from section,course,prereq where section.semester = 'spring' and section.course_id = course.course_id and section.year=2010 except select distinct course.course_id,course.title from course,prereq where prereq.course_id=course.course_id
+0;select course.course_id,course.title from course,teaches where teaches.semester='spring' and teaches.year='2010' and teaches.course_id=course.course_id) except (select course.course_id,course.title from course,prereq where course.course_id = prereq.course_id
+0;select course.course_id,course.title from teaches,course where teaches.course_id = course.course_id and teaches.year = 2010 and teaches.semester = 'spring' and not exists ( select * from prereq where prereq.course_id = course.course_id )
+0;select course_id,title from course natural join section where year = '2010' and semester = 'spring') except (select course_id,title from course natural join prereq
+0;select course_id,title from course natural join section where semester = 'spring' and year = 2010) except (select course.course_id,title from course,prereq where course.course_id = prereq.course_id
+0;select course.course_id,course.title from course,section where section.semester = 'spring' and section.year = '2010' and section.course_id = course.course_id ) except (select course.course_id,course.title from course,prereq,section where section.semester = 'spring' and section.year = '2010' and section.course_id = course.course_id and course.course_id = prereq.course_id
+0;select distinct course_id,title from teaches natural join course where semester = 'spring' and year ='2010') except (select distinct course_id,title from course natural join (teaches natural join prereq) where semester = 'spring' and year = 2010
