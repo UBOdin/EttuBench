@@ -31,9 +31,7 @@ public class Main {
 		
 		String[] data={"ub","bombay","phonelab-googleplus"};
 		String[] method={"aligon","makiyama","aouiche"};
-		HashSet<Integer> modules=new HashSet<Integer>();
-		modules.add(1);modules.add(2);modules.add(3);modules.add(4);
-		
+		HashSet<Integer> modules=new HashSet<Integer>();		
 		
 		for(int i=0;i<args.length;i++){
 			if(args[i].equalsIgnoreCase("-input")){
@@ -99,19 +97,20 @@ public class Main {
 		System.out.println("nonparsable queries are saved into "+datapath+data+"_nonparsable.txt");
 		System.out.println();
 
-			if(modules.contains(1))
-				System.out.println("naming module will be applied");
-			else if (modules.contains(2))
-				System.out.println("Expression Regularization module will be applied");
-			else if(modules.contains(3))
-				System.out.println("Flattening From-Nesting module will be applied");
-			else if (modules.contains(4))
-				System.out.println("Union pull-out module will be applied");
 
 		
 		for(int i=0;i<data.length;i++){
 			for(int j=0;j<method.length;j++){
-				queryComparison(data[i],method[j],queryLists.get(i),modules);
+				if(!modules.isEmpty()){
+				    queryComparison(data[i],method[j],queryLists.get(i),modules);
+				}
+				else{
+					for(int k=1;k<5;k++){
+						modules=new HashSet<Integer>();
+						modules.add(k);						
+						queryComparison(data[i],method[j],queryLists.get(i),modules);
+					}						
+				}					
 			}
 		}		
 	}
@@ -121,6 +120,14 @@ public class Main {
 		System.out.println("~~~~~~~~");
 		System.out.println("data using "+data);
 		System.out.println("metric using "+method);
+		if(modules.contains(1))
+			System.out.println("naming module will be applied");
+		else if (modules.contains(2))
+			System.out.println("Expression Regularization module will be applied");
+		else if(modules.contains(3))
+			System.out.println("Flattening From-Nesting module will be applied");
+		else if (modules.contains(4))
+			System.out.println("Union pull-out module will be applied");
 		System.out.println();
 		//parse queries
 		ArrayList<Statement> statementList1 = Utility.convertToStatement(data,datapath,queryList);
