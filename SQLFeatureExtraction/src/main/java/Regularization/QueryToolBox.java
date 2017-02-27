@@ -151,30 +151,43 @@ public class QueryToolBox {
 	 * @param ps
 	 * @return
 	 */
-	public static Expression parseUsing(List<Column> clist,Join j,PlainSelect ps){
+	public static Expression parseUsing(List<Column> clist,Join j,FromItem leftSide){
 		Expression using = null;
 		Table leftT=null;
-		FromItem leftSide=ps.getFromItem();
-        if (leftSide!=null){
 		
+        if (leftSide!=null){
+        	
 		if (leftSide instanceof Table){
-			leftT=new Table(null,((Table) leftSide).getName());
+			leftT=new Table();
+			leftT.setName(((Table) leftSide).getName());
+	       
 		}
-		else if (leftSide instanceof SubSelect)
-			leftT=new Table(null,((SubSelect)leftSide).getAlias());
+		else if (leftSide instanceof SubSelect){
+			leftT=new Table();			
+		}
+		else {
+			leftT=new Table();	
+		}
 
 		Table rightT=null;
 		FromItem f=j.getRightItem();
 		
 		if (f instanceof Table){
-			rightT=new Table(null,((Table) f).getName());
+			rightT=new Table();
+			rightT.setName(((Table) f).getName());
 		}
-		else if (f instanceof SubSelect)
-			rightT=new Table(null,((SubSelect)f).getAlias());
+		else if (f instanceof SubSelect){
+			rightT=new Table();
+		}
+		else {
+			rightT=new Table();
+		}
 
 		Column newLeft=new Column(leftT,clist.get(0).getColumnName());
 		Column newRight=new Column(rightT,clist.get(0).getColumnName());
+		
 		using=new EqualsTo(newLeft,newRight);
+		
 		for (int i=1;i<clist.size();i++){
 			newLeft=new Column(leftT,clist.get(i).getColumnName());
 			newRight=new Column(rightT,clist.get(i).getColumnName());

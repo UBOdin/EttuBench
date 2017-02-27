@@ -71,7 +71,7 @@ public class DNFNormalizer{
 			//take using into consideration
 			List<Column> clist=j.getUsingColumns();
 			if(clist!=null){
-				Expression using=QueryToolBox.parseUsing(clist, j, ps);
+				Expression using=QueryToolBox.parseUsing(clist, j, left);
 				if (mergedExp==null)
 					mergedExp=using;
 				else
@@ -99,7 +99,7 @@ public class DNFNormalizer{
 				//take using into consideration
 				List<Column> clist=j.getUsingColumns();
 				if(clist!=null){
-					Expression using=QueryToolBox.parseUsing(clist, j, ps);
+					Expression using=QueryToolBox.parseUsing(clist, j, ps.getFromItem());
 					if (mergedExp==null)
 						mergedExp=using;
 					else

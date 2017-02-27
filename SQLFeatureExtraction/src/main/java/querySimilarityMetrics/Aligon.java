@@ -266,7 +266,7 @@ public static double getDistanceAsRatio(TreeSet<ExtendedColumn> stmt1projection,
 	 */
 	@SuppressWarnings("unchecked")
 	private static void executePlainSelect(PlainSelect s, int queryOrder) {
-		Column c;
+		//Column c;
 		List<Table> tables = new ArrayList<Table>();
 		HashSet<ExtendedColumn> groupByColumns = new HashSet<ExtendedColumn>();
 		HashSet<ExtendedColumn> selectionColumns = new HashSet<ExtendedColumn>();
@@ -340,11 +340,11 @@ public static double getDistanceAsRatio(TreeSet<ExtendedColumn> stmt1projection,
 		
 		List<SelectItem> selectItems = s.getSelectItems();
 		
-		SelectItemListParser parser = new SelectItemListParser(selectItems, tables);
+//		SelectItemListParser parser = new SelectItemListParser(selectItems, tables);
 
 		if (selectItems != null) {
 			// check whether there is any function
-			int flip = 0;
+//			int flip = 0;
 			for (int i = 0; i < selectItems.size(); i++) {
 				SelectItem ss = selectItems.get(i);
 				if (ss instanceof SelectExpressionItem) {

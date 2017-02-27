@@ -350,7 +350,6 @@ public class Utility {
 					String[] arr = line.split("\t");
 					query = arr[1];
 					id = query.substring(1, query.indexOf("SELECT")-2);
-					System.out.println(id);
 					query = query.substring(query.indexOf("SELECT"));
 					query = query.substring(0, query.length() - 1);
 					if (arr[0].equals("Account")) {

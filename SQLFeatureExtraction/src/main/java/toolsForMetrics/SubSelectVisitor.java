@@ -122,9 +122,6 @@ public class SubSelectVisitor implements SelectVisitor, OrderByVisitor, SelectIt
 						columns.add(selectSchema.getValues().get(j));
 					}
 				}
-				else {
-					System.out.println(ss);
-				}
 			}
 		}
 		
@@ -144,9 +141,6 @@ public class SubSelectVisitor implements SelectVisitor, OrderByVisitor, SelectIt
 					for (int j = 0; j < selectSchema.getValues().size(); j++) {
 						columns.add(selectSchema.getValues().get(j));
 					}
-				}
-				else {
-					System.out.println(ss);
 				}
 			}
 		}
