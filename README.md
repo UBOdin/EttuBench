@@ -27,7 +27,7 @@ In order to evaluate different modules in regularization step, we consider 4 dif
 **modules.csv** contains all the number that are needed to produce Figure 4 in the paper.
 
 ## Reproducing experimental results
-## Extracting features from SQL queries and computing pairwise distance matrix
+### Extracting features from SQL queries and computing pairwise distance matrix
 Our Java code for extracting features frm SQL queries and compute the pairwise distance matrix among queries is given in folder **SQLFeatureExtraction**. The Java source code is provided in folder **SQLFeatureExtraction/src**. 
 
 **SQLComparison.jar** is an executable file that user can use to reproduce all pairwise distance matrices with all possible options for regularization. This jar file can be run from command line as follow:
@@ -36,10 +36,15 @@ Our Java code for extracting features frm SQL queries and compute the pairwise d
 
 where the possible options are as follow:
 - dataset(*ub*, *bombay* or *googleplus*) to be applied by using option *-input*. If no *-input* option is given, all three datasets *ub*, *bombay* and *googleplus* will be used by default to reproduce all possible pairwise distance matrices with all regularization options. For example, the *ub* dataset can be specified as follow:
+
     java -jar SQLComparison.jar -input ub
+
 - similarity metric (*aligon*, *makiyama* or *aouiche*) to be applied by using option *-metric*. If no *-metric* option is given, all three metrics including *aligon*, *aouiche* and *makiyama* will be used by default. For example, user can specify the metric as *aligon* using the following command:
+
     java -jar SQLComparison.jar -metric aligon
+
 - query regularization module (ID=1: Naming; ID=2: Expression Standardization; ID=3: Flattening From-Nested Sub-query; ID=4: Union Pull-out) can be specified by using option *-modules*. User can specify multiple modules by using their IDs with "&" delimiter. If no *-modules* option given, all modules will be used by default. For example, if user wants modules Naming(ID=1) and Expression Standardization(ID=2) to be applied, the following command can be used: 
+
     java -jar SQLComparison.jar -modules 1&2
 
 The output distance matrices can be found in folder *SQLFeatureExtraction/data/*
