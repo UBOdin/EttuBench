@@ -30,7 +30,7 @@ public class Main {
 			e.printStackTrace();
 		}
 
-		String[] data={"ub","bombay","phonelab-googleplus"};
+		String[] data={"ub","bombay","googleplus"};
 		String[] method={"aligon","makiyama","aouiche"};
 		HashSet<Integer> modules=new HashSet<Integer>();		
 
@@ -43,8 +43,8 @@ public class Main {
 						data[0]="ub";
 					else if (name.contains("bombay"))
 						data[0]="bombay";
-					else if (name.contains("pocket"))
-						data[0]="pocket"; 
+					else if (name.contains("googleplus"))
+						data[0]="googleplus"; 
 				}					
 			}
 			if(args[i].equalsIgnoreCase("-metric")){
@@ -69,6 +69,11 @@ public class Main {
 					}
 				}
 			}
+			if(args[i].equalsIgnoreCase("-datapath")){
+				if(i+1<args.length){
+					datapath = args[i+i];
+				}
+			}
 		}
 
 		ArrayList<ArrayList<String> > queryLists=new ArrayList<ArrayList<String>> ();
@@ -91,7 +96,7 @@ public class Main {
 			System.out.println();
 		}
 		long end=System.nanoTime();
-		System.out.println("query parsing finished. "+" Time used "+(double)(end-start)/1000000+" milisecs");
+		System.out.println("query parsing finished.");
 		System.out.println();
 
 		System.out.println("---begin query regulairization and comparison------");
@@ -151,7 +156,7 @@ public class Main {
 				statementList.add(CombinedRegularizer.regularize(s,modules));
 			}
 			long end=System.nanoTime();
-			System.out.println("regularization ended."+" Time used "+(double)(end-start)/1000000+" milisecs");
+			System.out.println("regularization ended.");
 			System.out.println();
 		}
 
@@ -185,7 +190,7 @@ public class Main {
 		}
 
 		Utility.WriteDistanceMatrixToFile(matrix, outputpath);	
-		System.out.println("comparison finished, distance matrix saved to "+outputpath+" Time used "+(double)(end-start)/1000000+" milisecs");
+		System.out.println("comparison finished, distance matrix saved to "+outputpath);
 		System.out.println();
 	}
 }
