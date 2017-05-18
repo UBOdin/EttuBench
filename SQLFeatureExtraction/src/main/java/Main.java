@@ -25,7 +25,7 @@ public class Main {
 			File f=new File(current);
 			String parent=f.getParent();
 			datapath=parent+"/data/";
-			System.out.println(datapath);
+			System.out.println("data path : "+datapath);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -79,7 +79,7 @@ public class Main {
 		ArrayList<ArrayList<String> > queryLists=new ArrayList<ArrayList<String>> ();
 		System.out.println("---begin query retrieval------");
 		System.out.println();
-		long start=System.nanoTime();
+		//long start=System.nanoTime();
 
 		for(int i=0;i<data.length;i++){
 			System.out.println("data set using is "+data[i]);
@@ -95,7 +95,7 @@ public class Main {
 			queryLists.add(queryList);	
 			System.out.println();
 		}
-		long end=System.nanoTime();
+		//long end=System.nanoTime();
 		System.out.println("query parsing finished.");
 		System.out.println();
 
@@ -150,18 +150,18 @@ public class Main {
 		//do a pass of regularization	
 		if(regu){
 			System.out.println("begin regularization");		
-			long start=System.nanoTime();
+			//long start=System.nanoTime();
 			for(int k=0;k<statementList1.size();k++){		
 				Select s=(Select) statementList1.get(k);
 				statementList.add(CombinedRegularizer.regularize(s,modules));
 			}
-			long end=System.nanoTime();
+			//long end=System.nanoTime();
 			System.out.println("regularization ended.");
 			System.out.println();
 		}
 
 		System.out.println("begin query comparison and clustering. ");
-		long start=System.nanoTime();
+		//long start=System.nanoTime();
 		// method name can be either aouiche, makiyama or aligon
 		double[][] matrix;
 		if(regu)
@@ -169,7 +169,7 @@ public class Main {
 		else
 			matrix = Utility.createDistanceMatrix(method, statementList1);	
 
-		long end=System.nanoTime();
+		//long end=System.nanoTime();
 		// write distance matrix to file
 		String outputpath;
 		if(!regu)
