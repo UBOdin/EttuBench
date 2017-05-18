@@ -2,45 +2,45 @@ Regularization,Dataset,Metric,Silhouette,BetaCV,DunnIndex
 No Regularization,IIT Bombay Dataset,Aouiche,0.1235358,0.5766875,0.1428571
 No Regularization,IIT Bombay Dataset,Aligon,0.3141606,0.5440821,0.1
 No Regularization,IIT Bombay Dataset,Makiyama,0.13533,0.664748,0.0741799
-No Regularization,UB Exam Dataset,Aouiche,0.07935877,0.9231208,0.2
-No Regularization,UB Exam Dataset,Aligon,0.1304497,0.8644934,0.5
-No Regularization,UB Exam Dataset,Makiyama,0.09405354,0.8968658,0.2301996
+No Regularization,Local Exam Dataset,Aouiche,0.07935877,0.9231208,0.2
+No Regularization,Local Exam Dataset,Aligon,0.1304497,0.8644934,0.5
+No Regularization,Local Exam Dataset,Makiyama,0.09405354,0.8968658,0.2301996
 No Regularization,PhoneLab-Google+,Aouiche,0.03618038,0.8934701,0.5
 No Regularization,PhoneLab-Google+,Aligon,0.06388966,0.9024188,0.5
 No Regularization,PhoneLab-Google+,Makiyama,0.1167357,0.8795412,0.2462216
 Naming,IIT Bombay Dataset,Aouiche,0.1669147,0.4963258,0.1666667
 Naming,IIT Bombay Dataset,Aligon,0.3697328,0.4765228,0.1
 Naming,IIT Bombay Dataset,Makiyama,0.1712637,0.6056812,0.0513167
-Naming,UB Exam Dataset,Aouiche,0.1726122,0.8177304,0.1666667
-Naming,UB Exam Dataset,Aligon,0.2543268,0.733504,0.3333333
-Naming,UB Exam Dataset,Makiyama,0.2684318,0.6965586,0.08146848
+Naming,Local Exam Dataset,Aouiche,0.1726122,0.8177304,0.1666667
+Naming,Local Exam Dataset,Aligon,0.2543268,0.733504,0.3333333
+Naming,Local Exam Dataset,Makiyama,0.2684318,0.6965586,0.08146848
 Naming,PhoneLab-Google+,Aouiche,0.03535551,0.8936538,0.5
 Naming,PhoneLab-Google+,Aligon,0.06260814,0.9036594,0.5
 Naming,PhoneLab-Google+,Makiyama,0.1127893,0.8855078,0.2462216
 Expression Standardization,IIT Bombay Dataset,Aouiche,0.1224014,0.6047874,0.1428571
 Expression Standardization,IIT Bombay Dataset,Aligon,0.2993084,0.5636266,0.1
 Expression Standardization,IIT Bombay Dataset,Makiyama,0.1363646,0.6599014,0.0741799
-Expression Standardization,UB Exam Dataset,Aouiche,0.08419705,0.9225258,0.2
-Expression Standardization,UB Exam Dataset,Aligon,0.08806635,0.9113887,0.3888889
-Expression Standardization,UB Exam Dataset,Makiyama,0.07635507,0.9195338,0.2600599
+Expression Standardization,Local Exam Dataset,Aouiche,0.08419705,0.9225258,0.2
+Expression Standardization,Local Exam Dataset,Aligon,0.08806635,0.9113887,0.3888889
+Expression Standardization,Local Exam Dataset,Makiyama,0.07635507,0.9195338,0.2600599
 Expression Standardization,PhoneLab-Google+,Aouiche,0.1188399,0.8847059,0.8
 Expression Standardization,PhoneLab-Google+,Aligon,0.09856893,0.8975172,0.5
 Expression Standardization,PhoneLab-Google+,Makiyama,0.1184555,0.8789764,0.3333333
 FROM-nested Subquery,IIT Bombay Dataset,Aouiche,0.1092233,0.585477,0.1428571
 FROM-nested Subquery,IIT Bombay Dataset,Aligon,0.3040806,0.5455569,0.1
 FROM-nested Subquery,IIT Bombay Dataset,Makiyama,0.1645668,0.6473655,0.0741799
-FROM-nested Subquery,UB Exam Dataset,Aouiche,0.07851794,0.9240567,0.2
-FROM-nested Subquery,UB Exam Dataset,Aligon,0.1323939,0.8655788,0.5
-FROM-nested Subquery,UB Exam Dataset,Makiyama,0.1216638,0.8640163,0.1835034
+FROM-nested Subquery,Local Exam Dataset,Aouiche,0.07851794,0.9240567,0.2
+FROM-nested Subquery,Local Exam Dataset,Aligon,0.1323939,0.8655788,0.5
+FROM-nested Subquery,Local Exam Dataset,Makiyama,0.1216638,0.8640163,0.1835034
 FROM-nested Subquery,PhoneLab-Google+,Aouiche,0.03618038,0.8934701,0.5
 FROM-nested Subquery,PhoneLab-Google+,Aligon,0.06444628,0.9018627,0.5
 FROM-nested Subquery,PhoneLab-Google+,Makiyama,0.1155413,0.8813375,0.3333333
 UNION Pull-out,IIT Bombay Dataset,Aouiche,0.1255522,0.5773791,0.1428571
 UNION Pull-out,IIT Bombay Dataset,Aligon,0.3170179,0.5432966,0.1
 UNION Pull-out,IIT Bombay Dataset,Makiyama,0.139807,0.6644235,0.0741799
-UNION Pull-out,UB Exam Dataset,Aouiche,0.07935877,0.9231208,0.2
-UNION Pull-out,UB Exam Dataset,Aligon,0.1285675,0.8660956,0.5
-UNION Pull-out,UB Exam Dataset,Makiyama,0.09405354,0.8968658,0.2301996
+UNION Pull-out,Local Exam Dataset,Aouiche,0.07935877,0.9231208,0.2
+UNION Pull-out,Local Exam Dataset,Aligon,0.1285675,0.8660956,0.5
+UNION Pull-out,Local Exam Dataset,Makiyama,0.09405354,0.8968658,0.2301996
 UNION Pull-out,PhoneLab-Google+,Aouiche,0.03618038,0.8934701,0.5
 UNION Pull-out,PhoneLab-Google+,Aligon,0.06372295,0.9022875,0.5
 UNION Pull-out,PhoneLab-Google+,Makiyama,0.1155413,0.8813375,0.3333333

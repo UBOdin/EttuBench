@@ -12,7 +12,7 @@ comparison$Regularization <- factor(comparison$Regularization,
                                                "FROM-nested Subquery",
                                                "UNION Pull-out"))
 comparison$Dataset <- factor(comparison$Dataset, 
-                             levels = c("IIT Bombay Dataset", "UB Exam Dataset",
+                             levels = c("IIT Bombay Dataset", "Local Exam Dataset",
                                         "PhoneLab-Google+"))
 
 # individual module analysis
