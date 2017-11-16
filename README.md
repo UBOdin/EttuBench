@@ -1,5 +1,5 @@
 ## Introduction
-This repository contains all the code and data we use to produce experimental results in paper "Towards Effective Log Clustering"
+This repository contains all the code and data we use to produce experimental results in paper "Similarity Measures for SQL Query Clustering"
 
 ## Organization of the repository
 - data folder: Contains all data files that are used in the experiments
