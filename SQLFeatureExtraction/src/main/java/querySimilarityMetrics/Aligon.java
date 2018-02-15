@@ -45,6 +45,30 @@ public class Aligon {
 	private static TreeSet<ExtendedColumn> selectionList1 = new TreeSet<>();
 	private static TreeSet<ExtendedColumn> selectionList2 = new TreeSet<>();
 	
+	private static double PROJECTION_WEIGHT = 1.0 / 3.0;
+	private static double GROUP_BY_WEIGHT = 1.0 / 3.0;
+	private static double SELECTION_WEIGHT = 1.0 / 3.0;
+	
+	
+	/**
+	 * This metric uses a default of 1/3 weight for all sets. This method changes the default settings.
+	 * @param projectionWeight Default 1/3
+	 * @param groupByWeight Default 1/3
+	 * @param selectionWeight Default 1/3
+	 * @throws Exception - The sum of the weights must be equal to 1
+	 */
+	public static void setWeights(double projectionWeight, double groupByWeight, double selectionWeight) throws Exception {
+		
+		//This is a naive check if the weights are consistent
+		if (projectionWeight + groupByWeight + selectionWeight > 0.99 && projectionWeight + groupByWeight + selectionWeight < 1.01) {
+			PROJECTION_WEIGHT = projectionWeight;
+			GROUP_BY_WEIGHT = groupByWeight;
+			SELECTION_WEIGHT = selectionWeight;
+		} else {
+			throw new Exception("The total weight must be equal to 1. Using previously set weights: " + PROJECTION_WEIGHT + "," + GROUP_BY_WEIGHT + "," + SELECTION_WEIGHT);
+		}
+	} 
+	
 	public static void createQueryVector(Statement stmt1) {
 		projectionList1 = new TreeSet<>();
 		groupbyList1 = new TreeSet<>();
@@ -115,30 +139,34 @@ public static double getDistanceAsRatio(TreeSet<ExtendedColumn> stmt1projection,
 			unionProjection.addAll(stmt2projection);
 			
 			double variableSize = 0.0;
+			double comp = 0.0;
 			double groupByScore = 0;
 			double selectionScore = 0;
 			double projectionScore = 0;
 			
 			if (unionGroupBy.size() > 0) {
 				groupByScore = 1 - ((double)(unionGroupBy.size() - intersectionGroupBy.size()) / (double)unionGroupBy.size());
-				variableSize++;
+				comp += GROUP_BY_WEIGHT;
+				//variableSize++;
 			}
 			
 			if (unionSelection.size() > 0) {
 				selectionScore = 1 - ((double)(unionSelection.size() - intersectionSelection.size()) / (double)unionSelection.size());
-				variableSize++;
+				comp += SELECTION_WEIGHT;
+				//variableSize++;
 			}
 			
 			if (unionProjection.size() > 0) {
 				projectionScore = (double)intersectionProjection.size() / (double)unionProjection.size();
-				variableSize++;
+				comp += PROJECTION_WEIGHT;
+				//variableSize++;
 			}
 			
-			if (variableSize == 0.0) {
+			if (comp == 0.0) {
 				return 0;
 			}
 			
-			return (groupByScore + selectionScore + projectionScore) / variableSize;
+			return ((GROUP_BY_WEIGHT * groupByScore) + (SELECTION_WEIGHT * selectionScore) + (PROJECTION_WEIGHT * projectionScore)) * (1.0 / comp);
 	}
 
 	
@@ -209,30 +237,34 @@ public static double getDistanceAsRatio(TreeSet<ExtendedColumn> stmt1projection,
 			unionProjection.addAll(projectionList2);
 			
 			double variableSize = 0.0;
+			double comp = 0.0;
 			double groupByScore = 0;
 			double selectionScore = 0;
 			double projectionScore = 0;
 			
 			if (unionGroupBy.size() > 0) {
 				groupByScore = 1 - ((double)(unionGroupBy.size() - intersectionGroupBy.size()) / (double)unionGroupBy.size());
-				variableSize++;
+				comp += GROUP_BY_WEIGHT;
+				//variableSize++;
 			}
 			
 			if (unionSelection.size() > 0) {
 				selectionScore = 1 - ((double)(unionSelection.size() - intersectionSelection.size()) / (double)unionSelection.size());
-				variableSize++;
+				comp += SELECTION_WEIGHT;
+				//variableSize++;
 			}
 			
 			if (unionProjection.size() > 0) {
 				projectionScore = (double)intersectionProjection.size() / (double)unionProjection.size();
-				variableSize++;
+				comp += PROJECTION_WEIGHT;
+				//variableSize++;
 			}
 			
 			if (variableSize == 0.0) {
 				return 0;
 			}
 			
-			return (groupByScore + selectionScore + projectionScore) / variableSize;
+			return ((GROUP_BY_WEIGHT * groupByScore) + (SELECTION_WEIGHT * selectionScore) + (PROJECTION_WEIGHT * projectionScore)) * (1.0 / comp);
 		} else {
 			if (stmt1 instanceof Select)
 				System.err.println(stmt2 + " is not a Select query");
