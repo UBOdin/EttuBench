@@ -149,18 +149,30 @@ silhouettePlot <- function(distMat, label, fileName) {
   sil <- silhouette(label, as.dist(distMat))
   if (length(unique(label)) < 9) {
     fviz_silhouette(sil, label = FALSE, print.summary = FALSE, 
-                    palette = "Dark2",
+                    #palette = "Dark2",
+                    #palette = "jco",
                     ylab = "Silhouette Coefficient", main="", ylim=c(-0.8, 0.9)) +
+      theme_bw() +
+      #scale_fill_manual(values=rep(c("black", "darkgrey", "grey", "lightgrey"), 4)) +
+      #scale_color_manual(values=rep(c("black", "darkgrey", "grey", "lightgrey"), 4)) +
+      scale_fill_grey() +
+      scale_color_grey() +
       theme_minimal(base_size=12)+
-      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
+      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) #+
       ggsave(filename = fileName)  
   } else {
     getPalette = colorRampPalette(brewer.pal(9, "Set1"))
     fviz_silhouette(sil, label = FALSE, print.summary = FALSE, 
-                    palette = getPalette(length(unique(label))),
+                    #palette = getPalette(length(unique(label))),
+                    #palette = "jco",
                     ylab = "Silhouette Coefficient", main="", ylim=c(-0.8, 0.9)) +
+      theme_bw() +
+      #scale_fill_manual(values=rep(c("black", "darkgrey", "grey", "lightgrey"), 4)) +
+      #scale_color_manual(values=rep(c("black", "darkgrey", "grey", "lightgrey"), 4)) +
+      scale_fill_grey() +
+      scale_color_grey() +
       theme_minimal(base_size=12)+
-      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
+      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) #+
       ggsave(filename = fileName)  
   }
   

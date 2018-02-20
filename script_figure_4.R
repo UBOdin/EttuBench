@@ -20,5 +20,6 @@ ggplot(data = comparison, aes(x = Metric, y = Silhouette, fill=Regularization)) 
   geom_bar(position="dodge", stat="identity") + facet_grid(~ Dataset) + 
   ylab("Average Silhouette Coefficient") + xlab("Metric") + 
   theme_bw(base_size = 14) + theme(legend.position = "top", legend.title = element_blank()) + 
-  scale_fill_brewer(palette = "Dark2") +
+  #scale_fill_brewer(palette = "Dark2") +
+  scale_fill_grey() +
   ggsave(file = "./figure/module.pdf")

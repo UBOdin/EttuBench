@@ -1,6 +1,6 @@
 # set working directory
 #setwd("~/Downloads/EttuBench")
-
+setwd("~/github/EttuBench/")
 # load two files evaluation.R and utils.R
 source(file = "./evaluation.R")
 source(file = "./utils.R")
