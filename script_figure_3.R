@@ -1,36 +1,25 @@
 # set working directory
 #setwd("~/Downloads/EttuBench")
-setwd("~/github/EttuBench/")
-# load two files evaluation.R and utils.R
-source(file = "./evaluation.R")
-source(file = "./utils.R")
 
 # load supporting libraries
-library(cluster)
-library(factoextra)
-library(RColorBrewer)
+library(ggplot2)
 
-dataset <- read.csv(file = "./data/bombay_queries.csv", header = TRUE, sep = "\t")
+comparison <- read.csv(file = "./data/modules.csv")
+comparison$Regularization <- factor(comparison$Regularization, 
+                                    levels = c("No Regularization",
+                                               "Naming",
+                                               "Expression Standardization",
+                                               "FROM-nested Subquery",
+                                               "UNION Pull-out"))
+comparison$Dataset <- factor(comparison$Dataset, 
+                             levels = c("IIT Bombay Dataset", "UB Exam Dataset",
+                                        "PhoneLab-Google+"))
 
-distMat <- readDistMat("./data/bombay_aligon.csv")
-silhouettePlot(distMat, dataset$label, "./figure/sil_bombay_Aligon.pdf")
-
-distMat <- readDistMat("./data/bombay_aligon_regularization.csv")
-silhouettePlot(distMat, dataset$label, "./figure/sil_bombay_Aligon_regularization.pdf")
-
-dataset <- read.csv(file = "./data/ub_queries.csv", header = TRUE, sep = "\t")
-
-distMat <- readDistMat("./data/ub_aligon.csv")
-silhouettePlot(distMat, dataset$label, "./figure/sil_ub_Aligon.pdf")
-
-distMat <- readDistMat("./data/ub_aligon_regularization.csv")
-silhouettePlot(distMat, dataset$label, "./figure/sil_ub_Aligon_regularization.pdf")
-
-dataset <- read.csv(file = "./data/googleplus_queries.csv", header = TRUE, sep = "\t")
-
-distMat <- readDistMat("./data/googleplus_aligon.csv")
-silhouettePlot(distMat, dataset$label, "./figure/sil_googleplus_Aligon.pdf")
-
-distMat <- readDistMat("./data/googleplus_aligon_regularization.csv")
-silhouettePlot(distMat, dataset$label, "./figure/sil_googleplus_Aligon_regularization.pdf")
-
+# individual module analysis
+ggplot(data = comparison, aes(x = Metric, y = Silhouette, fill=Regularization)) + 
+  geom_bar(position="dodge", stat="identity") + facet_grid(~ Dataset) + 
+  ylab("Average Silhouette Coefficient") + xlab("Metric") + 
+  theme_bw(base_size = 14) + theme(legend.position = "top", legend.title = element_blank()) + 
+  #scale_fill_brewer(palette = "Dark2") +
+  scale_fill_grey() +
+  ggsave(file = "./figure/module.pdf")
