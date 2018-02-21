@@ -1,3 +1,4 @@
+rm(list = ls())
 # set working directory
 #setwd("~/Downloads/EttuBench")
 
@@ -13,7 +14,7 @@ comparison$Regularization <- factor(comparison$Regularization,
                                                "UNION Pull-out"))
 comparison$Dataset <- factor(comparison$Dataset, 
                              levels = c("IIT Bombay Dataset", "UB Exam Dataset",
-                                        "PhoneLab-Google+"))
+                                        "PocketData-Google+"))
 
 # individual module analysis
 ggplot(data = comparison, aes(x = Metric, y = Silhouette, fill=Regularization)) + 

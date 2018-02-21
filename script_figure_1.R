@@ -1,3 +1,4 @@
+rm(list = ls())
 # set working directory
 #setwd("~/Downloads/EttuBench")
 

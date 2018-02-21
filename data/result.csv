@@ -1,19 +1,19 @@
 dataset,regularization,metric,silhouette,beta_cv,dunn
 IIT Bombay Dataset,FALSE,Makiyama,0.13533,0.664748,0.0741799
 IIT Bombay Dataset,TRUE,Makiyama,0.1976854,0.5898416,0.0741799
-IIT Bombay Dataset,FALSE,Aligon,0.3143479,0.5448168,0.1
-IIT Bombay Dataset,TRUE,Aligon,0.3485726,0.4825776,0.1
+IIT Bombay Dataset,FALSE,Aligon,0.3173757,0.5354263,0.1
+IIT Bombay Dataset,TRUE,Aligon,0.3497405,0.4776469,0.1
 IIT Bombay Dataset,FALSE,Aouiche,0.1235358,0.5766875,0.1428571
 IIT Bombay Dataset,TRUE,Aouiche,0.1273715,0.5236675,0.2
 UB Exam Dataset,FALSE,Makiyama,0.09405354,0.8968658,0.2301996
 UB Exam Dataset,TRUE,Makiyama,0.3033892,0.6454333,0.08146848
-UB Exam Dataset,FALSE,Aligon,0.1310474,0.86316,0.5
-UB Exam Dataset,TRUE,Aligon,0.2307616,0.7602108,0.25
+UB Exam Dataset,FALSE,Aligon,0.1922526,0.7996284,0.5
+UB Exam Dataset,TRUE,Aligon,0.2340873,0.7590479,0.25
 UB Exam Dataset,FALSE,Aouiche,0.07935877,0.9231208,0.2
 UB Exam Dataset,TRUE,Aouiche,0.2356835,0.7466782,0.1666667
 PocketData-Google+,FALSE,Makiyama,0.1167357,0.8795412,0.2462216
 PocketData-Google+,TRUE,Makiyama,0.1146658,0.8845571,0.3333333
-PocketData-Google+,FALSE,Aligon,0.06302234,0.903197,0.5
-PocketData-Google+,TRUE,Aligon,0.09746097,0.8988391,0.5
+PocketData-Google+,FALSE,Aligon,0.05981839,0.8982047,0.4375
+PocketData-Google+,TRUE,Aligon,0.09359808,0.8953341,0.5
 PocketData-Google+,FALSE,Aouiche,0.03618038,0.8934701,0.5
 PocketData-Google+,TRUE,Aouiche,0.1193279,0.8841241,0.8
