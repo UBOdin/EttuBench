@@ -47,7 +47,7 @@ public class Aligon {
 	
 	private static double PROJECTION_WEIGHT = 1.0 / 3.0;
 	private static double GROUP_BY_WEIGHT = 1.0 / 3.0;
-	private static double SELECTION_WEIGHT = 1.0 / 3.0;
+	private static double SELECTION_WEIGHT = 1 - PROJECTION_WEIGHT - GROUP_BY_WEIGHT;
 	
 	
 	/**
@@ -57,16 +57,18 @@ public class Aligon {
 	 * @param selectionWeight Default 1/3
 	 * @throws Exception - The sum of the weights must be equal to 1
 	 */
-	public static void setWeights(double projectionWeight, double groupByWeight, double selectionWeight) throws Exception {
+	public static void setWeights(double projectionWeight, double groupByWeight, double selectionWeight) {
 		
 		//This is a naive check if the weights are consistent
-		if (projectionWeight + groupByWeight + selectionWeight > 0.99 && projectionWeight + groupByWeight + selectionWeight < 1.01) {
-			PROJECTION_WEIGHT = projectionWeight;
-			GROUP_BY_WEIGHT = groupByWeight;
-			SELECTION_WEIGHT = selectionWeight;
-		} else {
-			throw new Exception("The total weight must be equal to 1. Using previously set weights: " + PROJECTION_WEIGHT + "," + GROUP_BY_WEIGHT + "," + SELECTION_WEIGHT);
-		}
+		//if (projectionWeight + groupByWeight + selectionWeight > 0.99 && projectionWeight + groupByWeight + selectionWeight < 1.01) {
+		double s = projectionWeight + groupByWeight + selectionWeight;
+		PROJECTION_WEIGHT = projectionWeight / s;
+		GROUP_BY_WEIGHT = groupByWeight / s;
+		SELECTION_WEIGHT = selectionWeight / s;
+		
+		//} else {
+		//	throw new Exception("The total weight must be equal to 1. Using previously set weights: " + PROJECTION_WEIGHT + "," + GROUP_BY_WEIGHT + "," + SELECTION_WEIGHT);
+		//}
 	} 
 	
 	public static void createQueryVector(Statement stmt1) {
