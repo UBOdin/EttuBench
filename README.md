@@ -49,11 +49,8 @@ where the possible options are as follow:
 
 The output distance matrices can be found in folder *SQLFeatureExtraction/data/*
 
-### Reproduce figure 2
-In order to reproduce distribution of silhouette coefficients when using Aligon similarity without regularization and when regularization is applied as shown in Figure 2 of the paper, users can open the file *script_figure_2.R*. Running this script file will produce the silhouette plots in folder *figure*.
-
-### Reproduce figure 3
-In order to reproduce the plots for comparison between three similarity metrics (Aligon, Aouiche, Makiyama) on three datasets (IIT Bombay, UB Exam and PocketData-Google+ datasets) with and without regularization as shown in Figure 3 of the paper, users can use the file *script_figure_3.R*. 
+### Reproduce figure 1
+In order to reproduce the plots for comparison between three similarity metrics (Aligon, Aouiche, Makiyama) on three datasets (IIT Bombay, UB Exam and PocketData-Google+ datasets) with and without regularization as shown in Figure 1 of the paper, users can use the file *script_figure_1.R*. 
 
 This script requires an input file *result.csv* in *data* folder. We have filled all the numbers for this file. For reproducibility, the numbers in *result.csv* can be manually filled by running the following commands in R:
 
@@ -77,11 +74,14 @@ This script requires an input file *result.csv* in *data* folder. We have filled
     print(BetaCV(distMat, dataset$label))
     print(DunnIndex(distMat, dataset$label))
 
-When the input file is ready, running *script_figure_3.R* file will produce the corresponding figures in folder *figure*.
+When the input file is ready, running *script_figure_1.R* file will produce the corresponding figures in folder *figure*.
 
-### Reproduce figure 4
-In order to reproduce the plots for comparing the effect of different modules in regularization as shown in Figure 4 of the paper, users can use the file *script_figure_4.R*. 
+### Reproduce figure 2
+In order to reproduce distribution of silhouette coefficients when using Aligon similarity without regularization and when regularization is applied as shown in Figure 2 of the paper, users can open the file *script_figure_2.R*. Running this script file will produce the silhouette plots in folder *figure*.
+
+### Reproduce figure 3
+In order to reproduce the plots for comparing the effect of different modules in regularization as shown in Figure 3 of the paper, users can use the file *script_figure_3.R*. 
 
 This script requires an input file *modules.csv* in *data* folder. We have filled all the numbers in this file. For reproducibility, the numbers in this file can be manually filled by computing average silhouette coefficients, BetaCV and Dunn Index for each module in regularization.
 
-When the input file is ready, running this *script_figure_4.R* will produce the corresponding figure in folder *figure*.
+When the input file is ready, running this *script_figure_3.R* will produce the corresponding figure in folder *figure*.
