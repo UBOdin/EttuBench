@@ -23,4 +23,4 @@ ggplot(data = comparison, aes(x = Metric, y = Silhouette, fill=Regularization)) 
   theme_bw(base_size = 14) + theme(legend.position = "top", legend.title = element_blank()) + 
   #scale_fill_brewer(palette = "Dark2") +
   scale_fill_grey() +
-  ggsave(file = "./figure/module.pdf")
+  ggsave(file = "./figure/module.eps")

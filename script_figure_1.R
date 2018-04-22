@@ -15,17 +15,17 @@ ggplot(data = comparison, aes(x = metric, y = silhouette, fill = regularization)
   geom_bar(position="dodge", stat="identity") + facet_grid(~ dataset) + 
   ylab("Average Silhouette Coefficient") + xlab("Metric") + 
   theme_bw(base_size = 18) + theme(legend.position = "top") + scale_fill_grey() +
-  ggsave(filename = "./figure/compare_silhouette.pdf", height = 5)
+  ggsave(filename = "./figure/compare_silhouette.eps", height = 5, width = 9)
 
 ggplot(data = comparison, aes(x = metric, y = beta_cv, fill = regularization)) + 
   geom_bar(position="dodge", stat="identity") + facet_grid(~ dataset) + 
   ylab("BetaCV") + xlab("Metric") + 
   theme_bw(base_size = 18) + theme(legend.position = "top") + scale_fill_grey() +
-  ggsave(filename = "./figure/compare_betacv.pdf", height = 5)
+  ggsave(filename = "./figure/compare_betacv.eps", height = 5, width = 9)
 
 ggplot(data = comparison, aes(x = metric, y = dunn, fill = regularization)) + 
   geom_bar(position="dodge", stat="identity") + facet_grid(~ dataset) + 
   ylab("Dunn Index") + xlab("Metric") + 
   theme_bw(base_size = 18) + theme(legend.position = "top") + scale_fill_grey() +
-  ggsave(filename = "./figure/compare_dunn.pdf", height = 5)
+  ggsave(filename = "./figure/compare_dunn.eps", height = 5, width = 9)
 

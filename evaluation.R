@@ -173,7 +173,7 @@ silhouettePlot <- function(distMat, label, fileName) {
       scale_color_grey() +
       theme_minimal(base_size=12)+
       theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) #+
-      ggsave(filename = fileName)  
+      ggsave(filename = fileName, height = 5, width = 8)  
   }
   
 }
